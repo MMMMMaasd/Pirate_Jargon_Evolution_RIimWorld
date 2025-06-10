@@ -41,6 +41,12 @@
           <HintPath>..\..\..\..\Contents\Resources\Data\Managed\Assembly-CSharp.dll</HintPath>
           <Private>False</Private>
         </Reference>
+        <Reference Include="Newtonsoft.Json">
+          <HintPath>..\..\..\..\..\..\..\workshop\content\294100\3413305419\Assemblies\Newtonsoft.Json.dll</HintPath>
+        </Reference>
+        <Reference Include="RestSharp">
+          <HintPath>..\..\..\..\..\..\..\workshop\content\294100\3413305419\Assemblies\RestSharp.dll</HintPath>
+        </Reference>
         <Reference Include="System"/>
         <Reference Include="System.Core"/>
         <Reference Include="System.Data"/>
@@ -49,11 +55,23 @@
           <HintPath>..\..\..\..\Contents\Resources\Data\Managed\UnityEngine.dll</HintPath>
           <Private>False</Private>
         </Reference>
+        <Reference Include="UnityEngine.CoreModule">
+          <HintPath>..\..\..\..\Contents\Resources\Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.UnityWebRequestModule">
+          <HintPath>..\..\..\..\Contents\Resources\Data\Managed\UnityEngine.UnityWebRequestModule.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Class1.cs"/>
-        <Compile Include="Main.cs" />
+        <Compile Include="CompThinking.cs" />
+        <Compile Include="Patch_Ollama_Induction.cs" />
+        <Compile Include="Patch_Pawn.cs" />
+        <Compile Include="Patch_TryInteract.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
+    </ItemGroup>
+    <ItemGroup>
+      <None Include="packages.config" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
