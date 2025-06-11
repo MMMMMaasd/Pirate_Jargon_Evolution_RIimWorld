@@ -8,9 +8,9 @@ namespace PirateJargonEvolution
     {
         static Patch_Pawn()
         {
-            InjectThinkingComp();
+            InjectPirateModComp();
         }
-        static void InjectThinkingComp()
+        static void InjectPirateModComp()
         {
             foreach (var def in DefDatabase<ThingDef>.AllDefs)
             {
@@ -21,8 +21,8 @@ namespace PirateJargonEvolution
                         def.comps = new List<CompProperties>();
                     }
 
-                    bool alreadyHas = def.comps.Any(c => c.compClass == typeof(CompThinking));
-                    if (!alreadyHas)
+                    bool alreadyHasThinking = def.comps.Any(c => c.compClass == typeof(CompThinking));
+                    if (!alreadyHasThinking)
                     {
                         def.comps.Add(new CompProperties
                         {
@@ -31,8 +31,18 @@ namespace PirateJargonEvolution
 
                         Log.Message($"[PirateJargon] Added CompThinking to {def.defName}");
                     }
+                    
+                    bool alreadyHasPirateIdentity = def.comps.Exists(c => c.compClass == typeof(CompPirateIdentity));
+                    if (!alreadyHasPirateIdentity)
+                    {
+                        def.comps.Add(new CompProperties_PirateIdentity());
+                        Log.Message($"[PirateJargon] Added CompPirateIdentity to {def.defName}");
+                    }
+                    
                 }
             }
         }
     }
 }
+
+

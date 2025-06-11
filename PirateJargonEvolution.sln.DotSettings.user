@@ -15,4 +15,5 @@
   &lt;Assembly Path="/Users/bianzeyu/Library/Application Support/Steam/steamapps/workshop/content/294100/2009463077/1.4/Assemblies/0Harmony.dll" /&gt;
   &lt;Assembly Path="/Users/bianzeyu/Library/Application Support/Steam/steamapps/workshop/content/294100/3365889763/Assemblies/Bubbles.dll" /&gt;
   &lt;Assembly Path="/Users/bianzeyu/Library/Application Support/Steam/steamapps/workshop/content/294100/3365889763/Assemblies/RimDialogueClient.dll" /&gt;
+  &lt;Assembly Path="/Users/bianzeyu/Library/Application Support/Steam/steamapps/common/RimWorld/RimWorldMac.app/Contents/Resources/Data/Managed/UnityEngine.CoreModule.dll" /&gt;
 &lt;/AssemblyExplorer&gt;</s:String></wpf:ResourceDictionary>

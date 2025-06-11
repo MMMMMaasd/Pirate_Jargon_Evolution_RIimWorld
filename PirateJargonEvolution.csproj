@@ -64,10 +64,15 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="CompPirateIdentity.cs" />
         <Compile Include="CompThinking.cs" />
+        <Compile Include="JargonEntry.cs" />
+        <Compile Include="Patch_InjectPirateComp.cs" />
         <Compile Include="Patch_Ollama_Induction.cs" />
         <Compile Include="Patch_Pawn.cs" />
         <Compile Include="Patch_TryInteract.cs" />
+        <Compile Include="PirateFactionManager.cs" />
+        <Compile Include="PirateFactionMemory.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
     </ItemGroup>
     <ItemGroup>

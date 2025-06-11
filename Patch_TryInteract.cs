@@ -34,6 +34,18 @@ namespace PirateJargonEvolution
                 recipient.TryGetComp<CompThinking>()?.StartThinking();
                 
                 string placeholder = "(thinking...)";
+                
+                Log.Message($"Total Pirate Factions: {Current.Game.GetComponent<PirateFactionManager>().pirateFactions.Count}");
+                foreach (var kvp in Current.Game.GetComponent<PirateFactionManager>().pirateFactions)
+                {
+                    var mem = kvp.Value;
+                    Log.Message($"== {mem.FactionName} ==\nLeader: {mem.Leader}\nCurrent Jargon: {mem.CurrentJargon}");
+                    foreach (var entry in mem.JargonEvolutionHistory)
+                    {
+                        Log.Message($"  • {entry.JargonWord} = {entry.Meaning} ({entry.OriginStory})");
+                    }
+                }
+
 
                 if (InteractionUtility.IsGoodPositionForInteraction(initiator.Position, recipient.Position, initiator.Map))
                 {
