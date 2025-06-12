@@ -6,6 +6,7 @@ using HarmonyLib;
 using RestSharp;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using PirateJargonEvolution.Utils; 
 
 namespace PirateJargonEvolution
 {
@@ -14,45 +15,68 @@ namespace PirateJargonEvolution
         [HarmonyPatch(typeof(Pawn_InteractionsTracker), nameof(Pawn_InteractionsTracker.TryInteractWith))]
         public static class TryInteractWith_Patch
         {
-            public static void Prefix(Pawn_InteractionsTracker __instance, Pawn recipient, InteractionDef intDef)
+            static bool Prefix(Pawn_InteractionsTracker __instance, Pawn recipient, InteractionDef intDef, ref bool __result)
             {
-                if (!PirateJargonEvolution.settings.enableMod) return;
-                if (__instance == null || recipient == null || intDef == null) return;
-
                 Pawn initiator = Traverse.Create(__instance).Field("pawn").GetValue<Pawn>();
-                if (initiator == null || recipient == null)
+
+                if (initiator == null || recipient == null || !PirateJargonEvolution.settings.enableMod)
                 {
-                    Log.Message("Cannot find initiator");
-                    return;
+                    return true;
                 }
 
-                if (!initiator.Spawned || !recipient.Spawned) return;
-
-                initiator.jobs.StopAll();
-                recipient.jobs.StopAll();
-                initiator.TryGetComp<CompThinking>()?.StartThinking();
-                recipient.TryGetComp<CompThinking>()?.StartThinking();
-                
-                string placeholder = "(thinking...)";
-                
-                Log.Message($"Total Pirate Factions: {Current.Game.GetComponent<PirateFactionManager>().pirateFactions.Count}");
-                foreach (var kvp in Current.Game.GetComponent<PirateFactionManager>().pirateFactions)
+                if (intDef == InteractionDefOf.Chitchat && ShouldUsePirateJargon(initiator, recipient) && !IsPawnBusy(initiator) && !IsPawnBusy(recipient))
                 {
-                    var mem = kvp.Value;
-                    Log.Message($"== {mem.FactionName} ==\nLeader: {mem.Leader}\nCurrent Jargon: {mem.CurrentJargon}");
-                    foreach (var entry in mem.JargonEvolutionHistory)
+                    __result = false;
+                    
+                    // 当两个傻逼没死
+                    if (!initiator.Dead && !recipient.Dead)
                     {
-                        Log.Message($"  • {entry.JargonWord} = {entry.Meaning} ({entry.OriginStory})");
+                        Log.Message($"Total Pirate Factions: {Current.Game.GetComponent<PirateFactionManager>().pirateFactions.Count}");
+                        foreach (var kvp in Current.Game.GetComponent<PirateFactionManager>().pirateFactions)
+                        {
+                            var mem = kvp.Value;
+                            Log.Message($"== {mem.FactionName} ==\nLeader: {mem.Leader}\nCurrent Jargon: {mem.CurrentJargon}");
+                            foreach (var entry in mem.JargonEvolutionHistory)
+                            {
+                                Log.Message($"  • {entry.JargonWord} = {entry.Meaning} ({entry.OriginStory})");
+                            }
+                        }
+                        Log.Message($"FactionId: {initiator.TryGetComp<CompPirateIdentity>().pirateFactionId}");
+                        Log.Message($"Position: {initiator.TryGetComp<CompPirateIdentity>().positionInFaction}");
+                        Log.Message("KnownJargon:");
+                        foreach (string jargon in initiator.TryGetComp<CompPirateIdentity>().knownJargon)
+                        {
+                            Log.Message($"{jargon}");
+                        }
+                        string situation = SharedEventUtil.GetSharedEventDescription(initiator, recipient);
+                        PirateJargonDialogueManager.StartDialogue(initiator, recipient, situation);
                     }
+
+                    return false;
                 }
 
-
-                if (InteractionUtility.IsGoodPositionForInteraction(initiator.Position, recipient.Position, initiator.Map))
-                {
-                    MoteMaker.ThrowText(initiator.DrawPos, initiator.Map, placeholder);
-                }
+                return true;
                 
             }
+            
+            private static bool IsPawnBusy(Pawn p)
+            {
+                var comp = p.TryGetComp<CompThinking>();
+                return comp != null && comp.IsBusy;
+            }
+            
+            static bool ShouldUsePirateJargon(Pawn a, Pawn b)
+            {
+                var compA = a.TryGetComp<CompPirateIdentity>();
+                var compB = b.TryGetComp<CompPirateIdentity>();
+
+                // 检查两个 pawn 都有 pirate 身份且在同一 pirate 派系中
+                return compA != null && compB != null &&
+                       !string.IsNullOrEmpty(compA.pirateFactionId) &&
+                       compA.pirateFactionId == compB.pirateFactionId;
+            }
+            
+            
         }
 
     }

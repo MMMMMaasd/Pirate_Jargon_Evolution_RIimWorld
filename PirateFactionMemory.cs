@@ -31,7 +31,31 @@ namespace PirateJargonEvolution
             Scribe_Values.Look(ref Leader, "Leader");
             Scribe_Values.Look(ref CurrentJargon, "CurrentJargon");
             Scribe_Collections.Look(ref JargonEvolutionHistory, "JargonEvolutionHistory", LookMode.Deep); // Deep copy
-            Scribe_Collections.Look(ref Members, "Members", LookMode.Deep);
+            Scribe_Collections.Look(ref Members, "Members", LookMode.Value);
+        }
+
+        public List<string> GetJargonListInString()
+        {
+            List<string> result = new List<string>();
+            foreach (JargonEntry entry in JargonEvolutionHistory)
+            {
+                result.Add(entry.getJargon());
+            }
+
+            return result;
+        }
+
+        public JargonEntry GetJargonInfo(string jargon)
+        {
+            foreach (JargonEntry entry in JargonEvolutionHistory)
+            {
+                if (entry.getJargon() == jargon)
+                {
+                    return entry;
+                }
+            }
+
+            return null;
         }
     }
 }

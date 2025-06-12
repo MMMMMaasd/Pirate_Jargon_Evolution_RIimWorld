@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Verse;
 namespace PirateJargonEvolution
 {
@@ -8,6 +9,8 @@ namespace PirateJargonEvolution
         public string Meaning;
         public string OriginStory;
 
+        public JargonEntry() {}
+        
         public JargonEntry(string jargonWord, string meaning, string originStory)
         {
             JargonWord = jargonWord;
@@ -25,6 +28,21 @@ namespace PirateJargonEvolution
         public override string ToString()
         {
             return $"{JargonWord} = {Meaning} ({OriginStory})";
+        }
+
+        public string getJargon()
+        {
+            return JargonWord;
+        }
+
+        public string getMeaning()
+        {
+            return Meaning;
+        }
+
+        public string getOriginStory()
+        {
+            return OriginStory;
         }
     }
 }
