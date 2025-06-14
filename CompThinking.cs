@@ -18,7 +18,9 @@ namespace PirateJargonEvolution
         public bool isThinking = false;
         public bool IsThinking => isThinking;
         
-        // 放置死循环，不能有三个人一起交流
+        private bool hasInsertedWaitJob = false;
+        
+        // 防止死循环，不能有三个人一起交流
         public bool IsBusy => isThinking;
 
         public void startThinking()
@@ -34,9 +36,22 @@ namespace PirateJargonEvolution
         public override void CompTick()
         {
             base.CompTick();
-            if (isThinking && parent is Pawn pawn)
+            if (isThinking && parent is Pawn pawn && pawn.jobs != null)
             {
-                pawn.jobs.StopAll();
+                if (pawn.CurJobDef != JobDefOf.Wait && !hasInsertedWaitJob)
+                {
+                    Job waitJob = JobMaker.MakeJob(JobDefOf.Wait, 1200); // 150 ticks = 2.5s
+                    waitJob.expiryInterval = 1200;
+                    waitJob.checkOverrideOnExpire = true;
+                    waitJob.playerForced = true;
+                    pawn.jobs.StartJob(waitJob, JobCondition.InterruptForced, resumeCurJobAfterwards: false);
+                    hasInsertedWaitJob = true;
+                }
+                else
+                {
+                    hasInsertedWaitJob = false;
+                    // pawn.jobs.StopAll();
+                }
             }
         }
     

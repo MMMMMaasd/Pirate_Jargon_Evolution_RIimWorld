@@ -28,7 +28,8 @@ namespace PirateJargonEvolution
                 {
                     __result = false;
                     
-                    // 当两个傻逼没死
+                    // 当两个人
+                    
                     if (!initiator.Dead && !recipient.Dead)
                     {
                         Log.Message($"Total Pirate Factions: {Current.Game.GetComponent<PirateFactionManager>().pirateFactions.Count}");

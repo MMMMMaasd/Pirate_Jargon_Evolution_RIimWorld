@@ -39,6 +39,16 @@ namespace PirateJargonEvolution
                         Log.Message($"[PirateJargon] Added CompPirateIdentity to {def.defName}");
                     }
                     
+                    bool alreadyHasMoteRepeater = def.comps.Exists(c => c.compClass == typeof(CompMoteRepeater));
+                    if (!alreadyHasMoteRepeater)
+                    {
+                        def.comps.Add(new CompProperties_MoteRepeater
+                        {
+                            intervalTicks = 200f
+                        });
+                        Log.Message($"[PirateJargon] Added CompMoteRepeater to {def.defName}");
+                    }
+                    
                 }
             }
         }
