@@ -2,6 +2,7 @@ using Verse;
 using System.Threading.Tasks;
 using PirateJargonEvolution.Utils;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace PirateJargonEvolution
 {
@@ -17,8 +18,11 @@ namespace PirateJargonEvolution
             if (compB != null)
                 compB.startThinking();
             
+            var moteA = initiator.TryGetComp<CompMoteRepeater>();
+            var moteB = recipient.TryGetComp<CompMoteRepeater>();
 
-            MoteBubbleHelper.ThrowStaticText(initiator, "...");
+            moteA?.StartRepeating();
+            // MoteBubbleHelper.ThrowStaticText(initiator, "...");
 
             PirateFactionMemory commonFaction =
                 SharedEventUtil.GetFaction(initiator.TryGetComp<CompPirateIdentity>().pirateFactionId);
@@ -26,14 +30,17 @@ namespace PirateJargonEvolution
             string prompt1 = OllamaPromptGenerator.GenerateJargonEvolutionPromptInitiator(commonFaction, initiator, recipient, situation);
             string response1 = await OllamaHelper.CallOllamaAsync(prompt1);
             
+            moteA?.StopRepeating();
             MoteBubbleHelper.ThrowStaticText(initiator, response1);
             
             await Task.Delay(3000);
             
-            MoteBubbleHelper.ThrowStaticText(recipient, "...");
+            moteB?.StartRepeating();
+            // MoteBubbleHelper.ThrowStaticText(recipient, "...");
             string prompt2 = OllamaPromptGenerator.GenerateJargonEvolutionPromptRecipient(commonFaction, recipient, initiator, situation, response1);
             string response2 = await OllamaHelper.CallOllamaAsync(prompt2);
-
+            
+            moteB?.StopRepeating();
             MoteBubbleHelper.ThrowStaticText(recipient, response2);
 
             // Leanred the jargon

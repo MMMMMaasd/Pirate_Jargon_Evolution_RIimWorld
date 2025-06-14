@@ -86,6 +86,7 @@ namespace PirateJargonEvolution
                      Return your answer in the format of a list of items, each item is: (jargon word, meaning, origin story of it)";
         }
         
+        
         private static string FormatJargonDictionary(Pawn pawn, PirateFactionMemory memory)
         {
             var lines = new List<string>();

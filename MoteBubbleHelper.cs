@@ -18,7 +18,7 @@ namespace PirateJargonEvolution
                 MoteMaker.ThrowText(pawn.DrawPos, pawn.Map, loadingText, 360f);
         }
         
-        public static void ThrowStaticText(Pawn pawn, string text, float durationTicks = 100f)
+        public static void ThrowStaticText(Pawn pawn, string text, float durationTicks = 10f)
         {
             var loc = pawn.DrawPos;
             var map = pawn.Map;
@@ -30,7 +30,13 @@ namespace PirateJargonEvolution
                 moteText.exactPosition = loc;
                 moteText.text = text;
                 moteText.textColor = Color.white;
-                if (durationTicks >= 0f)
+                if (text == "...")
+                {
+                    moteText.exactPosition += new Vector3(0.4f, 0, 0);
+                    moteText.Scale = 2f;
+                    moteText.overrideTimeBeforeStartFadeout = -1f;
+                }
+                else if (durationTicks >= 0f)
                 {
                     moteText.overrideTimeBeforeStartFadeout = durationTicks;
                 }
