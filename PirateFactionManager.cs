@@ -33,9 +33,9 @@ namespace PirateJargonEvolution
                 if (!pirateFactions.ContainsKey(factionId))
                 {
                     var leaderName = faction.leader?.Name?.ToStringFull ?? "Unknown";
-                    string pirateName = faction == Faction.OfPlayer ? "Crimson Tide" : $"Skull Crew {nameIndex++}";
+                    string factionName = faction == Faction.OfPlayer ? "Crimson Tide" : $"Skull Crew {nameIndex++}";
 
-                    PirateFactionMemory mem = new PirateFactionMemory(factionId, pirateName, leaderName);
+                    PirateFactionMemory mem = new PirateFactionMemory(factionId, factionName, leaderName);
 
                     if (faction == Faction.OfPlayer)
                     {
@@ -50,8 +50,8 @@ namespace PirateJargonEvolution
                     }
 
                     pirateFactions[factionId] = mem;
-                    faction.Name = pirateName;
-                    Log.Message($"[PirateJargon] Registered pirate faction: {factionId} as {pirateName}");
+                    faction.Name = factionName;
+                    Log.Message($"[PirateJargon] Registered pirate faction: {factionId} as {factionName}");
                 }
             }
         }

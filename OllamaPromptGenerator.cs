@@ -78,12 +78,14 @@ namespace PirateJargonEvolution
                      Here is the jargon this faction knows and speaks:
                      {FormatJargonDictionary(memory)}.
                      You are about to create a new jargon word based on this situation/event that occurred: {situation}.
-                     Now generate some new pirate jargon words and their meaning (less than 5 jargon words in total).
-                     Everything, including the jargon itself, must be in English, no other language!
-                     Don't reuse existing jargon! And your newly created jargon should somehow reflecting this event happening.
-                     Keep the same style and tone of the existing known jargon in this faction as much as possible!
 
-                     Return your answer in the format of a list of items, each item is: (jargon word, meaning, origin story of it)";
+                     Everything, including the jargon itself, must be in English, no other language!
+                     Don't reuse existing jargon! And your newly created jargon should somehow reflect this event happening.
+                     Keep the same style and tone of the existing known jargon in this faction as much as possible!
+                     
+                     Please invent 1–5 new pirate jargons using this format: (jargon word, meaning, origin story)
+                     Return ONLY the list in that format.  --- be careful that we need the left and right parentheses for each item in the list! 
+                     Do not include explanations or commentary.";
         }
         
         
