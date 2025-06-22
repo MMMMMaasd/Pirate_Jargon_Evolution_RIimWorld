@@ -122,12 +122,12 @@ namespace PirateJargonEvolution
                         {
                             factionName = factionNames[nameIndex];
                             leaderName = pirateCaptainDict[factionName];
-                            if (defNameMap.TryGetValue(factionName, out string defName))
-                            {
-                                faction.def = DefDatabase<FactionDef>.GetNamed(defName);
-                            }
-                            //faction.def = FactionDefOf.Pirate;
-                            //faction.RelationKindWith(Faction.OfPlayer);
+                            // if (defNameMap.TryGetValue(factionName, out string defName))
+                            // {
+                            // faction.def = DefDatabase<FactionDef>.GetNamed(defName);
+                            // }
+                            faction.def = FactionDefOf.Pirate;
+                            faction.RelationKindWith(Faction.OfPlayer);
                             nameIndex++;
                         }
                     }
