@@ -21,6 +21,7 @@ namespace PirateJargonEvolution
                     if (!def.inspectorTabs.Contains(typeof(ITab_Pawn_Jargon)))
                     {
                         def.inspectorTabs.Add(typeof(ITab_Pawn_Jargon));
+                        def.inspectorTabsResolved = null;  // Force re-resolve
                         Log.Message($"[PirateJargon] Injected ITab_Pawn_Jargon into {def.defName}");
                     }
                 }

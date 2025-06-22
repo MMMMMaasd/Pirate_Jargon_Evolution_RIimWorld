@@ -2,38 +2,34 @@ using System.Text;
 using UnityEngine;
 using Verse;
 using RimWorld;
+using System.Collections.Generic;
 
 namespace PirateJargonEvolution
 {
     public class ITab_Pawn_Jargon : ITab
     {
-        private const float Width = 400f;
-        private const float Height = 300f;
+        private const float Width = 630f;
+        private const float Height = 430f;
+        private Vector2 scrollPosition = Vector2.zero;
 
         private Pawn PawnForJargon
         {
             get
             {
-                if (SelPawn != null)
-                {
-                    return SelPawn;
-                }
-
-                if (SelThing is Corpse corpse)
-                {
-                    return corpse.InnerPawn;
-                }
-
+                if (SelPawn != null) return SelPawn;
+                if (SelThing is Corpse corpse) return corpse.InnerPawn;
                 return null;
             }
         }
 
         public ITab_Pawn_Jargon()
         {
-            this.size = new Vector2(Width, Height);
-            this.labelKey = "TabPirateJargon"; // optional if not localized
-            this.tutorTag = "PirateJargon";
+            size = new Vector2(Width, Height);
+            labelKey = "TabPirateJargon";
+            tutorTag = "PirateJargon";
         }
+
+        public override bool IsVisible => true;
 
         protected override void FillTab()
         {
@@ -44,21 +40,41 @@ namespace PirateJargonEvolution
                 return;
             }
 
-            CompPirateIdentity comp = pawn.TryGetComp<CompPirateIdentity>();
-            if (comp == null)
+            var comp = pawn.TryGetComp<CompPirateIdentity>();
+            if (comp == null || comp.knownJargon == null)
             {
-                Widgets.Label(new Rect(0, 0, size.x, size.y), "No pirate identity found.");
+                Widgets.Label(new Rect(10f, 10f, size.x - 20f, size.y - 20f), "No pirate identity found.");
                 return;
             }
 
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine("Known Pirate Jargon:\n");
-            foreach (string word in comp.knownJargon)
+            var manager = Current.Game.GetComponent<PirateFactionManager>();
+            if (!manager.pirateFactions.TryGetValue(comp.pirateFactionId, out var factionMemory))
             {
-                sb.AppendLine($"- {word}");
+                Widgets.Label(new Rect(10f, 10f, size.x - 20f, size.y - 20f), "No faction memory found.");
+                return;
             }
 
-            Widgets.Label(new Rect(10f, 10f, size.x - 20f, size.y - 20f), sb.ToString());
+            float viewHeight = Mathf.Max(100f, 24f * comp.knownJargon.Count + 30f);
+            Rect outRect = new Rect(10f, 10f, size.x - 20f, size.y - 20f);
+            Rect viewRect = new Rect(0f, 0f, outRect.width - 16f, viewHeight);
+
+            Widgets.BeginScrollView(outRect, ref scrollPosition, viewRect);
+            Listing_Standard listing = new Listing_Standard();
+            listing.Begin(viewRect);
+
+            listing.Label("Known Pirate Jargon:");
+
+            foreach (string word in comp.knownJargon)
+            {
+                var entry = factionMemory.GetJargonInfo(word);
+                if (entry != null)
+                    listing.Label($"• {entry.JargonWord}: {entry.Meaning}");
+                else
+                    listing.Label($"• {word}: ???");
+            }
+
+            listing.End();
+            Widgets.EndScrollView();
         }
     }
 }
