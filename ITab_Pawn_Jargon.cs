@@ -26,7 +26,7 @@ namespace PirateJargonEvolution
         {
             size = new Vector2(Width, Height);
             labelKey = "TabPirateJargon";
-            tutorTag = "PirateJargon";
+            tutorTag = "Jargon";
         }
 
         public override bool IsVisible => true;
