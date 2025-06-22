@@ -12,21 +12,27 @@ namespace PirateJargonEvolution.Utils
     {
         public static string GetSharedEventDescription(Pawn a, Pawn b)
         {
-            //var sharedTale = Find.TaleManager.AllTalesListForReading
-            //    .Where(t => t.def.usableForArt &&
-            //                t.descTargets != null &&
-            //                t.descTargets.Any(d => d.Thing == a) &&
-            //                t.descTargets.Any(d => d.Thing == b))
-            //    .OrderByDescending(t => t.date)
-            //    .FirstOrDefault();
-
-            //if (sharedTale != null)
-            //{
-            //    return $"You and your crewmate both experienced: {sharedTale.def.label}.";
-            //}
+            PirateFactionManager manager = Current.Game.GetComponent<PirateFactionManager>();
+            PirateFactionMemory factioMemory =
+                manager.GetFactionMemory(a.TryGetComp<CompPirateIdentity>().pirateFactionId);
             
-            // return "You and your crewmate are standing under the dim sun, sharing a moment of calm amidst the chaos.";
-            return "You and your crewmate just survived from a big black disease";
+            var sharedTale = factioMemory.PirateTaleHistory
+                .Where(t =>
+                {
+                    var witnesses = t.witnessNames;
+                    return witnesses.Contains(a.Name.ToStringShort) && witnesses.Contains(b.Name.ToStringShort);
+                })
+                .OrderByDescending(t => t.timestamp)
+                .FirstOrDefault();
+
+            if (sharedTale != null)
+            {
+                return $"You and your crewmate both experienced: {sharedTale.description}.";
+            }
+
+            return "You and your crewmate are standing under the dim sun, sharing a moment of calm amidst the chaos.";
+            
+            // return "You and your crewmate just survived from a big black disease";
         }
         
         

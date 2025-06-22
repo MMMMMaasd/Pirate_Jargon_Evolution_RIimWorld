@@ -12,7 +12,7 @@ namespace PirateJargonEvolution
 {
     public class Patch_TryInteract
     {
-        // [HarmonyPatch(typeof(Pawn_InteractionsTracker), nameof(Pawn_InteractionsTracker.TryInteractWith))]
+        [HarmonyPatch(typeof(Pawn_InteractionsTracker), nameof(Pawn_InteractionsTracker.TryInteractWith))]
         public static class TryInteractWith_Patch
         {
             static bool Prefix(Pawn_InteractionsTracker __instance, Pawn recipient, InteractionDef intDef, ref bool __result)
@@ -36,7 +36,7 @@ namespace PirateJargonEvolution
                         foreach (var kvp in Current.Game.GetComponent<PirateFactionManager>().pirateFactions)
                         {
                             var mem = kvp.Value;
-                            Log.Message($"== {mem.FactionName} ==\nLeader: {mem.Leader}\nCurrent Jargon: {mem.CurrentJargon}");
+                            Log.Message($"== {mem.FactionName} ==\nLeader: {mem.Leader}\n");
                             foreach (var entry in mem.JargonEvolutionHistory)
                             {
                                 Log.Message($"  • {entry.JargonWord} = {entry.Meaning} ({entry.OriginStory})");
@@ -49,7 +49,9 @@ namespace PirateJargonEvolution
                         {
                             Log.Message($"{jargon}");
                         }
-                        string situation = SharedEventUtil.GetSharedEventDescription(initiator, recipient);
+                        // Important here, get the most current event that both the initiator and the recipient
+                        // are witnesses in.
+                        string situation = SharedEventUtil.GetSharedEventDescription(initiator, recipient); 
                         PirateJargonDialogueManager.StartDialogue(initiator, recipient, situation);
                     }
 

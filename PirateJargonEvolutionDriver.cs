@@ -58,6 +58,14 @@ namespace PirateJargonEvolution
             if (witnesses.Count == 0) return;
             
             string witnessNames = string.Join(", ", witnesses.Select(p => p.Name?.ToStringShort ?? "Unknown"));
+            factionMemory.PirateTaleHistory.Add(new PirateFactionMemory.PirateTaleRecord
+            {
+                taleDef = taleDef,
+                description = situation,
+                timestamp = GenTicks.TicksGame,
+                witnessNames = witnesses.Select(p=> p.Name.ToStringShort).ToList()
+            });
+            
             Log.Message($"[PirateJargon] Tale triggered slang evolution: {situation}");
             Log.Message($"Witnesses: {witnessNames}");
             
@@ -122,7 +130,7 @@ namespace PirateJargonEvolution
             
         }
         
-        private static List<Pawn> GetAllPawnsFromTale(Tale tale)
+        public static List<Pawn> GetAllPawnsFromTale(Tale tale)
         {
             List<Pawn> pawns = new List<Pawn>();
             

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Verse;
 using System.Linq;
 using RimWorld;
+using System;
 namespace PirateJargonEvolution
 {
     public static class OllamaPromptGenerator
@@ -74,6 +75,8 @@ namespace PirateJargonEvolution
         
         public static string GenerateJargonEvolutionPromptTwoNPC(PirateFactionMemory memory, string situation)
         {
+            Random random = new Random();
+            int randomNum = random.Next(1, 6);
             return $@"In a medieval pirate simulation world, each faction has its own evolving slang/jargon language. 
                      Here is the jargon this faction knows and speaks:
                      {FormatJargonDictionary(memory)}.
@@ -83,7 +86,7 @@ namespace PirateJargonEvolution
                      Don't reuse existing jargon! And your newly created jargon should somehow reflect this event happening.
                      Keep the same style and tone of the existing known jargon in this faction as much as possible!
                      
-                     Please invent 1–5 new pirate jargons using this format: (jargon word, meaning, origin story)
+                     Please invent {randomNum} new pirate jargons using this format: (jargon word, meaning, origin story)
                      Return ONLY the list in that format.  --- be careful that we need the left and right parentheses for each item in the list! 
                      Do not include explanations or commentary.";
         }
