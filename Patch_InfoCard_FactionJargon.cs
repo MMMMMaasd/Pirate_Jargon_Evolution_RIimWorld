@@ -27,7 +27,7 @@ namespace PirateJargonEvolution
             }
 
             // FIX: Use faction's unique LoadID instead of defName
-            string memoryKey = faction.GetUniqueLoadID();
+            string memoryKey = faction == Faction.OfPlayer ? "player" : faction.GetUniqueLoadID();
 
             var memory = Current.Game.GetComponent<PirateFactionManager>()?.GetFactionMemory(memoryKey);
             if (memory == null || memory.JargonEvolutionHistory.Count == 0)
@@ -54,8 +54,8 @@ namespace PirateJargonEvolution
             Widgets.Label(new Rect(x, y, width, 22f), "Origin Story:");
             y += 22f;
 
-            Widgets.Label(new Rect(x + 10f, y, width - 10f, 40f), memory.OriginStory);
-            y += 44f;
+            Widgets.Label(new Rect(x + 10f, y, width - 10f, 80f), memory.OriginStory);
+            y += 84f;
 
             // Jargon Section
             Widgets.Label(new Rect(x, y, width, 24f), "Known Faction Jargon:");
