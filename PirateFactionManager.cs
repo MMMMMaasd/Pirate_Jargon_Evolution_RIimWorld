@@ -5,6 +5,7 @@ using Verse;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace PirateJargonEvolution
 {
@@ -99,14 +100,26 @@ namespace PirateJargonEvolution
                 { "Kidd's Pirates", "KiddPiratesFaction" }
             };
             
+            Dictionary<string, Gender> pirateGenderDict = new Dictionary<string, Gender>();
+            pirateGenderDict.Add("Calico Jack Pirate Group", Gender.Male); 
+            pirateGenderDict.Add("Blackbeard Pirates", Gender.Male); 
+            pirateGenderDict.Add("The Red Flag Fleet", Gender.Female); 
+            pirateGenderDict.Add("Prince Pirates", Gender.Male); 
+            pirateGenderDict.Add("Redbeard Pirates", Gender.Male); 
+            pirateGenderDict.Add("Kidd's Pirates", Gender.Male);
 
             int nameIndex = 0;
             int randomNameIndex = 1;
             
             foreach (Faction faction in Find.FactionManager.AllFactionsListForReading)
             {
-                string factionId = faction == Faction.OfPlayer ? "player" : faction.def.defName.ToLowerInvariant();
+                // string factionId = faction == Faction.OfPlayer ? "player" : faction.def.defName.ToLowerInvariant();
 
+                string factionId = faction == Faction.OfPlayer
+                    ? "player"
+                    : faction.GetUniqueLoadID();
+                
+                
                 if (!pirateFactions.ContainsKey(factionId))
                 {
                     string leaderName;
@@ -179,14 +192,22 @@ namespace PirateJargonEvolution
                                 faction.leader.Name = new NameTriple(desiredLeaderName, "", "");
                             }
 
+                            faction.leader.gender = pirateGenderDict[factionName];
+                            
                             Log.Message($"[PirateJargon] Set leader of {factionName} to {faction.leader.Name.ToStringFull}");
                         }
                     }
                     pirateFactions[factionId] = mem;
                     faction.Name = factionName;
                     Log.Message($"[PirateJargon] Registered pirate faction: {factionId} as {factionName}");
+                    foreach (JargonEntry entry in pirateFactions[factionId].JargonEvolutionHistory)
+                    {
+                        Log.Message(entry.JargonWord);
+                    }
+                    Log.Message("----------");
                 }
             }
+            
         }
 
         public override void ExposeData()
@@ -201,5 +222,6 @@ namespace PirateJargonEvolution
                 return mem;
             return null;
         }
+
     }
 }

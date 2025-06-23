@@ -43,7 +43,7 @@ namespace PirateJargonEvolution
                      Your relationship with him/her: {(opinion > 0 ? "Positive" : "Negative")} ({opinion} opinion)
                      Current Situation: {situation}
                      
-                     Now write a short, 1-2 sentence message that you say to your crewmate based on the current Situation, using your jargon naturally (you only speak the jargons that both you and this crewmate know).    
+                     Now write a short, 1-2 sentence daily chat message that you say to your crewmate based on the current Situation, using your jargon naturally (you only speak the jargons that both you and this crewmate know).    
                      Make it more detailed and personality-driven, considering your traits and relationship.
                      Return only the generated message, no additional text or instructions. Just what they said inside quotes.";
         }
@@ -68,7 +68,7 @@ namespace PirateJargonEvolution
                      Your relationship with him/her: {(opinion > 0 ? "Positive" : "Negative")} ({opinion} opinion)
                      Current Situation: {situation}
                      
-                     Now write a short, 1-2 sentence message that you reply to your crewmate, using your jargon naturally (you only speak the jargons that both you and this crewmate know).    
+                     Now write a short, 1-2 sentence daily chat message that you reply to your crewmate, using your jargon naturally (you only speak the jargons that both you and this crewmate know).    
                      Make it more detailed and personality-driven, considering your traits and relationship.
                      Return only the generated message, no additional text or instructions. Just what they said inside quotes.";
         }
@@ -86,7 +86,7 @@ namespace PirateJargonEvolution
                      Don't reuse existing jargon! And your newly created jargon should somehow reflect this event happening.
                      Keep the same style and tone of the existing known jargon in this faction as much as possible!
                      
-                     Please invent {randomNum} new pirate jargons using this format: (jargon word, meaning, origin story)
+                     Please invent {randomNum} new pirate jargons using this format: (jargon word, meaning, origin story), for the meaning, be sure this jargon is not too inclusive to one specific crewmate
                      Return ONLY the list in that format.  --- be careful that we need the left and right parentheses for each item in the list! 
                      Do not include explanations or commentary.";
         }

@@ -45,7 +45,7 @@ namespace PirateJargonEvolution
 
             // Leanred the jargon
             List<string> initiatorKnownJargon = initiator.TryGetComp<CompPirateIdentity>().knownJargon;
-            List<string> recipientKnownJargon = initiator.TryGetComp<CompPirateIdentity>().knownJargon;
+            List<string> recipientKnownJargon = recipient.TryGetComp<CompPirateIdentity>().knownJargon;
 
             foreach (string jargon in initiatorKnownJargon)
             {

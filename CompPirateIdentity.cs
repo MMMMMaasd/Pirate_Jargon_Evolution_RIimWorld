@@ -14,6 +14,7 @@ namespace PirateJargonEvolution
 
     public class CompPirateIdentity : ThingComp
     {
+        public int lastJargonInteractionTick = -99999;
         public string pirateFactionId = "";
         public List<string> knownJargon = new List<string>(); // 只存黑话关键词
         public string positionInFaction = "";
@@ -24,6 +25,7 @@ namespace PirateJargonEvolution
             Scribe_Values.Look(ref pirateFactionId, "pirateFactionId", "", false);
             Scribe_Collections.Look(ref knownJargon, "knownJargon",  LookMode.Value);
             Scribe_Values.Look(ref positionInFaction, "positionInFaction", "", false);
+            Scribe_Values.Look(ref lastJargonInteractionTick, "lastJargonInteractionTick", -9999, false);
         }
         
         public override void Initialize(CompProperties props)
@@ -31,7 +33,7 @@ namespace PirateJargonEvolution
             base.Initialize(props);
             if (parent is Pawn pawn && pawn.Faction != null)
             {
-                pirateFactionId = pawn.Faction == Faction.OfPlayer ? "player" : pawn.Faction.def.defName.ToLowerInvariant();
+                pirateFactionId = pawn.Faction == Faction.OfPlayer ? "player" : pawn.Faction.GetUniqueLoadID();
                 var manager = Current.Game.GetComponent<PirateFactionManager>();
                 if (manager.pirateFactions.TryGetValue(pirateFactionId, out var factionMemory))
                 {

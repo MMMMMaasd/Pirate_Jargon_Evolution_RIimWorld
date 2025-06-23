@@ -23,9 +23,9 @@ namespace PirateJargonEvolution
             Faction targetFaction = involvedPawns[0].Faction;
             if (involvedPawns.Any(p => p.Faction != targetFaction)) return;
             
-            string factionId = involvedPawns[0].Faction == Faction.OfPlayer
-                ? "player"
-                : involvedPawns[0].Faction.def.defName.ToLowerInvariant();
+            // string factionId = involvedPawns[0].Faction == Faction.OfPlayer ? "player" : involvedPawns[0].Faction.def.defName.ToLowerInvariant();
+            
+            string factionId = involvedPawns[0].Faction == Faction.OfPlayer ? "player" : involvedPawns[0].Faction.GetUniqueLoadID();
             
             PirateFactionManager manager = Current.Game.GetComponent<PirateFactionManager>();
             if (manager == null || !manager.pirateFactions.ContainsKey(factionId)) return;

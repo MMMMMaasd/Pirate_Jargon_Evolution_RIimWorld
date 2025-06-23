@@ -13,10 +13,10 @@ namespace PirateJargonEvolution.Utils
         public static string GetSharedEventDescription(Pawn a, Pawn b)
         {
             PirateFactionManager manager = Current.Game.GetComponent<PirateFactionManager>();
-            PirateFactionMemory factioMemory =
+            PirateFactionMemory factionMemory =
                 manager.GetFactionMemory(a.TryGetComp<CompPirateIdentity>().pirateFactionId);
             
-            var sharedTale = factioMemory.PirateTaleHistory
+            var sharedTale = factionMemory.PirateTaleHistory
                 .Where(t =>
                 {
                     var witnesses = t.witnessNames;
@@ -30,7 +30,7 @@ namespace PirateJargonEvolution.Utils
                 return $"You and your crewmate both experienced: {sharedTale.description}.";
             }
 
-            return "You and your crewmate are standing under the dim sun, sharing a moment of calm amidst the chaos.";
+            return "You and your crewmate are just want to have a daily relax chat";
             
             // return "You and your crewmate just survived from a big black disease";
         }
