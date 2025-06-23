@@ -41,6 +41,23 @@ namespace PirateJargonEvolution
             float width = inRect.width - 40f;
 
             Text.Font = GameFont.Small;
+            
+            // Leader
+            Widgets.Label(new Rect(x, y, width, 22f), $"Leader: {memory.Leader}");
+            y += 24f;
+
+            // Jargon Style
+            Widgets.Label(new Rect(x, y, width, 22f), $"Jargon Style: {memory.JargonStyle}");
+            y += 24f;
+
+            // Origin Story
+            Widgets.Label(new Rect(x, y, width, 22f), "Origin Story:");
+            y += 22f;
+
+            Widgets.Label(new Rect(x + 10f, y, width - 10f, 40f), memory.OriginStory);
+            y += 44f;
+
+            // Jargon Section
             Widgets.Label(new Rect(x, y, width, 24f), "Known Faction Jargon:");
             y += 26f;
 
@@ -49,6 +66,29 @@ namespace PirateJargonEvolution
                 if (y > inRect.yMax - 30f) break;
                 Widgets.Label(new Rect(x + 10f, y, width - 10f, 22f), $"• {entry.JargonWord}: {entry.Meaning}");
                 y += 22f;
+            }
+            
+            // Pirate Tale History
+            if (memory.PirateTaleHistory?.Count > 0)
+            {
+                y += 10f;
+                Widgets.Label(new Rect(x, y, width, 24f), "Tales Witnessed:");
+                y += 26f;
+
+                foreach (var tale in memory.PirateTaleHistory)
+                {
+                    if (y > inRect.yMax - 60f) break;
+
+                    Widgets.Label(new Rect(x + 10f, y, width - 10f, 22f), $"- {tale.description}");
+                    y += 22f;
+
+                    if (tale.witnessNames != null && tale.witnessNames.Count > 0)
+                    {
+                        string witnesses = string.Join(", ", tale.witnessNames);
+                        Widgets.Label(new Rect(x + 20f, y, width - 20f, 22f), $"Witnesses: {witnesses}");
+                        y += 24f;
+                    }
+                }
             }
         }
     }
