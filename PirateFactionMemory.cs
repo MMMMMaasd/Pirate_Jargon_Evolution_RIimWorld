@@ -22,6 +22,8 @@ namespace PirateJargonEvolution
         public List<JargonEntry> JargonEvolutionHistory = new List<JargonEntry>();
         public List<string> Members = new List<string>();
         public List<PirateTaleRecord> PirateTaleHistory = new List<PirateTaleRecord>();
+        public string JargonStyle;
+        public string OriginStory;
 
         
         // Default Constructor
@@ -30,11 +32,13 @@ namespace PirateJargonEvolution
             
         }
 
-        public PirateFactionMemory(string factionId, string factionName, string leader)
+        public PirateFactionMemory(string factionId, string factionName, string leader, string jargonStyle, string originStory)
         {
             FactionId = factionId;
             FactionName = factionName;
             Leader = leader;
+            JargonStyle = jargonStyle;
+            OriginStory = originStory;
             // CurrentJargon = "none";
         }
 
@@ -46,6 +50,8 @@ namespace PirateJargonEvolution
             // Scribe_Values.Look(ref CurrentJargon, "CurrentJargon");
             Scribe_Collections.Look(ref JargonEvolutionHistory, "JargonEvolutionHistory", LookMode.Deep); // Deep copy
             Scribe_Collections.Look(ref Members, "Members", LookMode.Value);
+            Scribe_Values.Look(ref JargonStyle, "JargonStyle");
+            Scribe_Values.Look(ref OriginStory, "OriginStory");
         }
 
         public List<string> GetJargonListInString()

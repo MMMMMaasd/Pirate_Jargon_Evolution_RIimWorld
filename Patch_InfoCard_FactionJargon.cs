@@ -21,15 +21,18 @@ namespace PirateJargonEvolution
                     faction = Find.FactionManager.AllFactions.FirstOrDefault(fac => fac.def == def);
             }
 
-            if (faction == null) return;
+            if (faction == null)
+            {
+                return;
+            }
 
             // FIX: Use faction's unique LoadID instead of defName
-            string memoryKey = faction.loadID.ToString();
+            string memoryKey = faction.GetUniqueLoadID();
 
             var memory = Current.Game.GetComponent<PirateFactionManager>()?.GetFactionMemory(memoryKey);
             if (memory == null || memory.JargonEvolutionHistory.Count == 0)
             {
-                Log.Message($"[PirateJargon] No memory or no jargon history for faction {faction.Name}");
+                Log.Message($"------------[PirateJargon] No memory or no jargon history for faction {faction.Name} ----------");
                 return;
             }
 

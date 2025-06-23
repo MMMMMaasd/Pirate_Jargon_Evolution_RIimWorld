@@ -29,6 +29,10 @@ namespace PirateJargonEvolution
             return $@"You are in a medieval pirates game world, 
                      You are a pirate named {initiator.Name.ToStringShort} talking to your crewmate {recipient.Name.ToStringShort}
                      Both of you and your crewmate each belonging to the faction '{memory.FactionName ?? "Unknown Pirate Crew"}'.
+                     For your reference:
+                     The jargon style of your faction: {memory.JargonStyle};
+                     The origin story of your faction: {memory.OriginStory};
+
                      Very Important ***In their conversation, you only speak the jargon that both of you and you crewmate know. *** 
                      Here are your (as the initiator of this talk) known jargon:
                      {FormatJargonDictionary(initiator, memory)}
@@ -54,6 +58,10 @@ namespace PirateJargonEvolution
             return $@"You are in a medieval pirates game world, 
                      You are a pirate named {initiator.Name.ToStringShort} reply to your crewmate {recipient.Name.ToStringShort}, who just said {input}.
                      Both of you and your crewmate each belonging to the faction '{memory.FactionName ?? "Unknown Pirate Crew"}'.
+                     For your reference:
+                     The jargon style of your faction: {memory.JargonStyle};
+                     The origin story of your faction: {memory.OriginStory};
+
                      Very Important ***In their conversation, you only speak the jargon that both of you and you crewmate know. *** 
                      Here are your known jargon:
                      {FormatJargonDictionary(initiator, memory)}
@@ -78,6 +86,11 @@ namespace PirateJargonEvolution
             Random random = new Random();
             int randomNum = random.Next(1, 6);
             return $@"In a medieval pirate simulation world, each faction has its own evolving slang/jargon language. 
+                     Your are creating new jargon word for this faction: {memory.FactionName}.
+
+                     For your reference:
+                     The jargon style of this faction: {memory.JargonStyle};
+                     The origin story of this faction: {memory.OriginStory};
                      Here is the jargon this faction knows and speaks:
                      {FormatJargonDictionary(memory)}.
                      You are about to create a new jargon word based on this situation/event that occurred: {situation}.
