@@ -69,6 +69,7 @@
         <Compile Include="OllamaHelper.cs" />
         <Compile Include="OllamaPromptGenerator.cs" />
         <Compile Include="Patch_GameComponentUtility.cs" />
+        <Compile Include="Patch_InfoCard_FactionJargon.cs" />
         <Compile Include="Patch_InjectJargonTab.cs" />
         <Compile Include="Patch_InjectPirateComp.cs" />
         <Compile Include="Patch_Ollama_Induction.cs" />
