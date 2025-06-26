@@ -30,7 +30,7 @@ namespace PirateJargonEvolution.Utils
                 return $"You and your crewmate both experienced: {sharedTale.description}.";
             }
 
-            return "You and your crewmate are just want to have a daily relax chat";
+            return "You and your crewmate just want to have a normal Rim World social interaction chat";
             
             // return "You and your crewmate just survived from a big black disease";
         }

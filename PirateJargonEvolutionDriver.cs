@@ -98,15 +98,23 @@ namespace PirateJargonEvolution
                     }
                 }
                 
-                foreach (var w in witnesses)
+                
+                // Add the new jargon to every member's known jargon in the faction
+                foreach (var pawn in manager.pirateFactions[factionId].Members
+                             .Where(p => p.Spawned && !p.Dead && p.Map != null))
                 {
-                    var mote = w.TryGetComp<CompMoteRepeater>();
-                    mote.StopRepeating();
-                    MoteBubbleHelper.ThrowStaticText(w, "Heard new slang...");
+                    Log.Message($"member here: {pawn.Name}");
+                    if (witnesses.Contains(pawn))
+                    {
+                        Log.Message($"Witness here: {pawn.Name}");
+                        var mote = pawn.TryGetComp<CompMoteRepeater>();
+                        mote.StopRepeating();
+                    }
+                    MoteBubbleHelper.ThrowStaticText(pawn, "Heard new slang...");
                     foreach (var entry in newEntries)
                     {
-                        w.TryGetComp<CompPirateIdentity>().knownJargon.Add(entry.JargonWord);
-                        Log.Message($"Jargon word {entry.JargonWord} added to {w.Name}");
+                        pawn.TryGetComp<CompPirateIdentity>().knownJargon.Add(entry.JargonWord);
+                        Log.Message($"Jargon word {entry.JargonWord} added to {pawn.Name}");
                     }
                 }
             }
@@ -125,6 +133,7 @@ namespace PirateJargonEvolution
                 if (comp != null)
                 {
                     comp.stopThinking();
+                    Log.Message($"Witness {w.Name} stop thinking");
                 }
             }
             

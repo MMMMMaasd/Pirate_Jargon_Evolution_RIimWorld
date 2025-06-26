@@ -62,14 +62,6 @@ namespace PirateJargonEvolution
 
             var groupedByFaction = allPawns.GroupBy(p => p.Faction.GetUniqueLoadID());
             
-            Log.Message("++++++++++++++++");
-            Log.Message(groupedByFaction);
-            foreach (var group in groupedByFaction)
-            {
-                Log.Message(group.Key);
-            }
-            Log.Message("++++++++++++++++");
-
             foreach (var group in groupedByFaction)
             {
                 string factionId = group.Key;

@@ -26,7 +26,7 @@ namespace PirateJargonEvolution
         public static string GenerateJargonEvolutionPromptInitiator(PirateFactionMemory memory, Pawn initiator, Pawn recipient, string situation)
         {
             float opinion = initiator.relations.OpinionOf(recipient);
-            return $@"You are in a medieval pirates game world, 
+            return $@"You are in the Rim World game world with a medieval pirates mod, you are playing a pirate in it, 
                      You are a pirate named {initiator.Name.ToStringShort} talking to your crewmate {recipient.Name.ToStringShort}
                      Both of you and your crewmate each belonging to the faction '{memory.FactionName ?? "Unknown Pirate Crew"}'.
                      For your reference:
@@ -55,7 +55,7 @@ namespace PirateJargonEvolution
         public static string GenerateJargonEvolutionPromptRecipient(PirateFactionMemory memory, Pawn initiator, Pawn recipient, string situation, string input)
         {
             float opinion = initiator.relations.OpinionOf(recipient);
-            return $@"You are in a medieval pirates game world, 
+            return $@"You are in the Rim World game world with a medieval pirates mod, you are playing a pirate in it, 
                      You are a pirate named {initiator.Name.ToStringShort} reply to your crewmate {recipient.Name.ToStringShort}, who just said {input}.
                      Both of you and your crewmate each belonging to the faction '{memory.FactionName ?? "Unknown Pirate Crew"}'.
                      For your reference:
@@ -85,24 +85,37 @@ namespace PirateJargonEvolution
         {
             Random random = new Random();
             int randomNum = random.Next(1, 6);
-            return $@"In a medieval pirate simulation world, each faction has its own evolving slang/jargon language. 
-                     Your are creating new jargon word for this faction: {memory.FactionName}.
+            return $@"
+            In a medieval pirate simulation world, each pirate faction has its own evolving slang or jargon language. 
+            Your task is to **invent {randomNum} new pirate jargons** for this faction: **{memory.FactionName}**.
 
-                     For your reference:
-                     The jargon style of this faction: {memory.JargonStyle};
-                     The origin story of this faction: {memory.OriginStory};
-                     Here is the jargon this faction knows and speaks:
-                     {FormatJargonDictionary(memory)}.
-                     You are about to create a new jargon word based on this situation/event that occurred: {situation}.
+            The style and tone of the jargons should follow this faction's linguistic flavor:
+                - Jargon style: {memory.JargonStyle}
+                - Faction origin story: {memory.OriginStory}
 
-                     Everything, including the jargon itself, must be in English, no other language!
-                     Don't reuse existing jargon! And your newly created jargon should somehow reflect this event happening.
-                     Keep the same style and tone of the existing known jargon in this faction as much as possible!
-                     
-                     Please invent {randomNum} new pirate jargons using this format: (jargon word, meaning, origin story), for the meaning, be sure this jargon is not too inclusive to one specific crewmate
-                     Return ONLY the list in that format.  --- be careful that we need the left and right parentheses for each item in the list! 
-                     Do not include explanations or commentary.";
+            Previously known jargon from this faction:
+            {FormatJargonDictionary(memory)}
+
+            Context for creating new jargons:
+            A recent event occurred in this faction: {situation}
+
+            In some of the new jargons, you may creatively refer to names of characters involved in the event (e.g., use someone's name as part of the phrase, or as a metaphor). 
+            But don't do this for all jargons — balance it out with metaphorical or stylistic expressions unique to the faction's culture.
+
+            Requirements:
+                - Do NOT reuse any existing jargon
+                - Do NOT use non-English language
+                - Follow the same stylistic tone and metaphor style as this faction's existing jargon
+                - Return only the list in this exact format:
+
+            (jargon word, meaning, origin story)
+
+            Example:
+            ('Anne’s Kiss', 'Escape through seduction', 'Anne Bonny once flirted with a guard to free a captive—her charm became legend.')
+
+            Return ONLY the list of new jargons using the above format, with parentheses and no extra explanation.";
         }
+
         
         
         private static string FormatJargonDictionary(Pawn pawn, PirateFactionMemory memory)
