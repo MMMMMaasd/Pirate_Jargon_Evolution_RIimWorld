@@ -20,7 +20,7 @@ namespace PirateJargonEvolution
         public string Leader;
         // public string CurrentJargon;
         public List<JargonEntry> JargonEvolutionHistory = new List<JargonEntry>();
-        public List<string> Members = new List<string>();
+        public List<Pawn> Members = new List<Pawn>();
         public List<PirateTaleRecord> PirateTaleHistory = new List<PirateTaleRecord>();
         public string JargonStyle;
         public string OriginStory;
@@ -49,7 +49,7 @@ namespace PirateJargonEvolution
             Scribe_Values.Look(ref Leader, "Leader");
             // Scribe_Values.Look(ref CurrentJargon, "CurrentJargon");
             Scribe_Collections.Look(ref JargonEvolutionHistory, "JargonEvolutionHistory", LookMode.Deep); // Deep copy
-            Scribe_Collections.Look(ref Members, "Members", LookMode.Value);
+            Scribe_Collections.Look(ref Members, "Members", LookMode.Reference);
             Scribe_Values.Look(ref JargonStyle, "JargonStyle");
             Scribe_Values.Look(ref OriginStory, "OriginStory");
         }

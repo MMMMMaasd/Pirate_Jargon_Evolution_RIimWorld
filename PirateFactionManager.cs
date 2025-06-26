@@ -12,7 +12,7 @@ namespace PirateJargonEvolution
     public class PirateFactionManager : GameComponent
     {
         public Dictionary<string, PirateFactionMemory> pirateFactions = new Dictionary<string, PirateFactionMemory>();
-
+        public string replacedFactionID;
         public PirateFactionManager(Game game) { }
 
         public override void FinalizeInit()
@@ -136,7 +136,10 @@ namespace PirateJargonEvolution
                 string factionId = faction == Faction.OfPlayer
                     ? "player"
                     : faction.GetUniqueLoadID();
-                
+                if (faction == Faction.OfPlayer)
+                {
+                    replacedFactionID = faction.GetUniqueLoadID();
+                }
                 
                 if (!pirateFactions.ContainsKey(factionId))
                 {
@@ -250,6 +253,24 @@ namespace PirateJargonEvolution
             if (pirateFactions.TryGetValue(id, out var mem))
                 return mem;
             return null;
+        }
+        
+        public void LogAllPirateFactionsAndMembers()
+        {
+            foreach (var kv in pirateFactions)
+            {
+                var mem = kv.Value;
+                Log.Message($"Faction: {mem.FactionName} (ID: {kv.Key}) - Leader: {mem.Leader}");
+
+                foreach (var member in mem.Members)
+                {
+                    var comp = member.TryGetComp<CompPirateIdentity>();
+                    string role = comp?.positionInFaction ?? "unknown";
+                    Log.Message($"  • {member.Name} ({role})");
+                }
+
+                Log.Message("-----------");
+            }
         }
 
     }

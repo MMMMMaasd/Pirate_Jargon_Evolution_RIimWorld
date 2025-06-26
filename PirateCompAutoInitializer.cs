@@ -45,6 +45,7 @@ namespace PirateJargonEvolution
             }
             
             AssignFactionPositionsToPawns();
+            manager.LogAllPirateFactionsAndMembers();
         }
 
         public override void ExposeData()
@@ -60,11 +61,32 @@ namespace PirateJargonEvolution
                 .ToList();
 
             var groupedByFaction = allPawns.GroupBy(p => p.Faction.GetUniqueLoadID());
+            
+            Log.Message("++++++++++++++++");
+            Log.Message(groupedByFaction);
+            foreach (var group in groupedByFaction)
+            {
+                Log.Message(group.Key);
+            }
+            Log.Message("++++++++++++++++");
 
             foreach (var group in groupedByFaction)
             {
                 string factionId = group.Key;
+                if (factionId == manager.replacedFactionID)
+                {
+                    factionId = "player";
+                }
                 var pawns = group.ToList();
+                if (manager.pirateFactions.TryGetValue(factionId, out var factionMemRec))
+                {
+                    factionMemRec.Members.Clear();
+    
+                    foreach (var p in pawns)
+                    {
+                        factionMemRec.Members.Add(p);
+                    }
+                }
                 
                 foreach (var p in pawns)
                 {
@@ -82,7 +104,18 @@ namespace PirateJargonEvolution
                     var comp = captain.TryGetComp<CompPirateIdentity>();
                     comp.positionInFaction = "captain";
                     Log.Message($"[PirateJargon] Assigned captain to {captain.Name}");
+                    
+                    if (manager.pirateFactions.TryGetValue(factionId, out var mem))
+                    {
+                        if (string.IsNullOrEmpty(mem.Leader) || mem.Leader == "Unknown")
+                        {
+                            mem.Leader = captain.Name.ToStringFull;
+                            Log.Message($"[PirateJargon] Set leader of {mem.FactionName} to {mem.Leader}");
+                        }
+                    }
                 }
+                
+                
 
                 // Assign other roles
                 var remaining = pawns.Where(p => p != captain).OrderBy(_ => Rand.Value).ToList();
@@ -121,5 +154,6 @@ namespace PirateJargonEvolution
                 }
             }
         }
+        
     }
 }

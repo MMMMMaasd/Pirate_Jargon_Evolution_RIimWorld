@@ -8,7 +8,7 @@ namespace PirateJargonEvolution
     {
         public static void Postfix()
         {
-            Current.Game.components.Add(new PirateCompAutoInitializer(Current.Game));
+            // Current.Game.components.Add(new PirateCompAutoInitializer(Current.Game));
         }
     }
 
