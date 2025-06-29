@@ -33,16 +33,18 @@ namespace PirateJargonEvolution
             PirateFactionMemory factionMemory = manager.GetFactionMemory(factionId);
             if (factionMemory == null) return;
             
-            string names = string.Join(", ", involvedPawns.Select(p => p.Name?.ToStringShort ?? "Unknown"));
-            string situation = $"A significant event occurred: {taleDef.label} involving {names}.";
+            // string names = string.Join(", ", involvedPawns.Select(p => p.Name?.ToStringShort ?? "Unknown"));
+            // string situation = $"A significant event occurred: {taleDef.label} involving {names}.";
+            string situation = GenerateTaleDescription(taleDef, involvedPawns);
+
             
-            var victim = involvedPawns[1];
-            var killer = involvedPawns[0];
+            // var victim = involvedPawns[1];
+            // var killer = involvedPawns[0];
             
-            if (taleDef == TaleDefOf.KilledColonist && involvedPawns.Count >= 2)
-            {
-                situation = $"A significant event occurred: The pirate {victim.Name.ToStringShort} was killed by {killer.Name.ToStringShort} in a brutal event.";
-            }
+            // if (taleDef == TaleDefOf.KilledColonist && involvedPawns.Count >= 2)
+            // {
+            //  situation = $"A significant event occurred: The pirate {victim.Name.ToStringShort} was killed by {killer.Name.ToStringShort} in a brutal event.";
+            // }
             
             // 寻找附近的目击成员
             List<Pawn> witnesses = new List<Pawn>();
@@ -51,7 +53,7 @@ namespace PirateJargonEvolution
                 if (pawn.Spawned && pawn.Map != null)
                 {
                     witnesses.AddRange(pawn.Map.mapPawns.AllPawnsSpawned
-                        .Where(p => p != victim && p.Faction == targetFaction && p.RaceProps.Humanlike && p.Position.InHorDistOf(pawn.Position, 15f)));
+                        .Where(p => p != pawn && p.Faction == targetFaction && p.RaceProps.Humanlike && p.Position.InHorDistOf(pawn.Position, 15f)));
                 }
             }
             witnesses = witnesses.Distinct().ToList();
@@ -98,23 +100,15 @@ namespace PirateJargonEvolution
                     }
                 }
                 
-                
-                // Add the new jargon to every member's known jargon in the faction
-                foreach (var pawn in manager.pirateFactions[factionId].Members
-                             .Where(p => p.Spawned && !p.Dead && p.Map != null))
+                foreach (var w in witnesses)
                 {
-                    Log.Message($"member here: {pawn.Name}");
-                    if (witnesses.Contains(pawn))
-                    {
-                        Log.Message($"Witness here: {pawn.Name}");
-                        var mote = pawn.TryGetComp<CompMoteRepeater>();
-                        mote.StopRepeating();
-                    }
-                    MoteBubbleHelper.ThrowStaticText(pawn, "Heard new slang...");
+                    var mote = w.TryGetComp<CompMoteRepeater>();
+                    mote.StopRepeating();
+                    MoteBubbleHelper.ThrowStaticText(w, "Heard new slang...");
                     foreach (var entry in newEntries)
                     {
-                        pawn.TryGetComp<CompPirateIdentity>().knownJargon.Add(entry.JargonWord);
-                        Log.Message($"Jargon word {entry.JargonWord} added to {pawn.Name}");
+                        w.TryGetComp<CompPirateIdentity>().knownJargon.Add(entry.JargonWord);
+                        Log.Message($"Jargon word {entry.JargonWord} added to {w.Name}");
                     }
                 }
             }
@@ -133,10 +127,173 @@ namespace PirateJargonEvolution
                 if (comp != null)
                 {
                     comp.stopThinking();
-                    Log.Message($"Witness {w.Name} stop thinking");
                 }
             }
             
+        }
+        
+        private static string GenerateTaleDescription(TaleDef taleDef, List<Pawn> pawns)
+        {
+            switch (taleDef.defName)
+            {
+                case "KilledChild":
+                case "KilledColonist":
+                case "KilledColonyAnimal":
+                case "KilledLongRange":
+                case "KilledMelee":
+                case "KilledMajorThreat":
+                case "DefeatedHostileFactionLeader":
+                    if (pawns.Count >= 2)
+                        return $"{pawns[0].Name.ToStringShort} killed {pawns[1].Name.ToStringShort}.";
+
+                    break;
+
+                case "ExecutedPrisoner":
+                    if (pawns.Count >= 1)
+                        return $"{pawns[0].Name.ToStringShort} was executed.";
+                    break;
+
+                case "Captured":
+                    if (pawns.Count >= 1)
+                        return $"{pawns[0].Name.ToStringShort} was captured.";
+                    break;
+
+                case "SoldPrisoner":
+                    if (pawns.Count >= 1)
+                        return $"{pawns[0].Name.ToStringShort} was sold.";
+                    break;
+
+                case "KidnappedColonist":
+                    if (pawns.Count >= 1)
+                        return $"{pawns[0].Name.ToStringShort} was kidnapped.";
+                    break;
+
+                case "ButcheredHumanlikeCorpse":
+                    if (pawns.Count >= 1)
+                        return $"{pawns[0].Name.ToStringShort} butchered a human corpse.";
+                    break;
+
+                case "AteRawHumanlikeMeat":
+                    if (pawns.Count >= 1)
+                        return $"{pawns[0].Name.ToStringShort} ate raw human meat.";
+                    break;
+
+                case "BecameLover":
+                    if (pawns.Count >= 2)
+                        return $"{pawns[0].Name.ToStringShort} and {pawns[1].Name.ToStringShort} became lovers.";
+                    break;
+
+                case "Marriage":
+                    if (pawns.Count >= 2)
+                        return $"{pawns[0].Name.ToStringShort} and {pawns[1].Name.ToStringShort} got married.";
+                    break;
+
+                case "Breakup":
+                    if (pawns.Count >= 2)
+                        return $"{pawns[0].Name.ToStringShort} and {pawns[1].Name.ToStringShort} broke up.";
+                    break;
+
+                case "SocialFight":
+                    if (pawns.Count >= 2)
+                        return $"{pawns[0].Name.ToStringShort} and {pawns[1].Name.ToStringShort} had a fight.";
+                    break;
+
+                case "CraftedArt":
+                    if (pawns.Count >= 1)
+                        return $"{pawns[0].Name.ToStringShort} crafted a piece of art.";
+                    break;
+
+                case "ReadBook":
+                    if (pawns.Count >= 1)
+                        return $"{pawns[0].Name.ToStringShort} read a book.";
+                    break;
+
+                case "Hunted":
+                    if (pawns.Count >= 1)
+                        return $"{pawns[0].Name.ToStringShort} hunted an animal.";
+                    break;
+
+                case "TamedAnimal":
+                    if (pawns.Count >= 1)
+                        return $"{pawns[0].Name.ToStringShort} tamed an animal.";
+                    break;
+
+                case "TrainedAnimal":
+                    if (pawns.Count >= 1)
+                        return $"{pawns[0].Name.ToStringShort} trained an animal.";
+                    break;
+
+                case "BondedWithAnimal":
+                    if (pawns.Count >= 1)
+                        return $"{pawns[0].Name.ToStringShort} bonded with an animal.";
+                    break;
+
+                case "Recruited":
+                    if (pawns.Count >= 1)
+                        return $"{pawns[0].Name.ToStringShort} was recruited.";
+                    break;
+
+                case "DidSurgery":
+                    if (pawns.Count >= 1)
+                        return $"{pawns[0].Name.ToStringShort} performed a surgery.";
+                    break;
+
+                case "GaveBirth":
+                    if (pawns.Count >= 1)
+                        return $"{pawns[0].Name.ToStringShort} gave birth.";
+                    break;
+
+                case "HealedMe":
+                    if (pawns.Count >= 2)
+                        return $"{pawns[0].Name.ToStringShort} healed {pawns[1].Name.ToStringShort}.";
+                    break;
+
+                case "MutatedMyArm":
+                    if (pawns.Count >= 1)
+                        return $"{pawns[0].Name.ToStringShort} mutated their arm.";
+                    break;
+
+                case "PerformedPsychicRitual":
+                    if (pawns.Count >= 1)
+                        return $"{pawns[0].Name.ToStringShort} performed a psychic ritual.";
+                    break;
+
+                case "StudiedEntity":
+                    if (pawns.Count >= 1)
+                        return $"{pawns[0].Name.ToStringShort} studied a strange entity.";
+                    break;
+
+                case "UnnaturalDarkness":
+                    if (pawns.Count >= 1)
+                        return $"{pawns[0].Name.ToStringShort} witnessed unnatural darkness.";
+                    break;
+
+                case "ClosedTheVoid":
+                    if (pawns.Count >= 1)
+                        return $"{pawns[0].Name.ToStringShort} closed the void.";
+                    break;
+
+                case "EmbracedTheVoid":
+                    if (pawns.Count >= 1)
+                        return $"{pawns[0].Name.ToStringShort} embraced the void.";
+                    break;
+
+                case "LandedInPod":
+                    if (pawns.Count >= 1)
+                        return $"{pawns[0].Name.ToStringShort} landed in a pod.";
+                    break;
+
+                case "CaravanAmbushedByHumanlike":
+                    return $"The caravan was ambushed by humanlike enemies.";
+                case "CaravanFled":
+                    return $"The caravan fled from danger.";
+                case "CaravanAmbushDefeated":
+                    return $"The caravan defeated the ambush.";
+                case "CaravanAssaultSuccessful":
+                    return $"The caravan successfully assaulted the target.";
+            }
+
+            return $"An event happened: {taleDef.label}";
         }
         
         public static List<Pawn> GetAllPawnsFromTale(Tale tale)

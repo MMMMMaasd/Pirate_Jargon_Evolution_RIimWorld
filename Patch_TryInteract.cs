@@ -13,8 +13,8 @@ namespace PirateJargonEvolution
 {
     public class Patch_TryInteract
     {
-        private static int lastGlobalJargonDialogueTick = 0;
-        private const int MinGlobalTicksBetweenDialogues = 6000; // 1 game hour
+        private static int lastGlobalJargonSpreadTick = 0;
+        private const int MinGlobalTicksBetweenSpreads = 2000; // 1 game hour
         
         [HarmonyPatch(typeof(Pawn_InteractionsTracker), nameof(Pawn_InteractionsTracker.TryInteractWith))]
         public static class TryInteractWith_Patch
@@ -39,18 +39,13 @@ namespace PirateJargonEvolution
                     var compInitiator = initiator.TryGetComp<CompPirateIdentity>();
                     var compRecipient = recipient.TryGetComp<CompPirateIdentity>();
                     
-                    if (currentTick - lastGlobalJargonDialogueTick < MinGlobalTicksBetweenDialogues)
-                    {
-                        return true;
-                    }
-
-                    const int IndividualCooldownTicks = 15000;
-                    if (currentTick - compInitiator.lastJargonInteractionTick < IndividualCooldownTicks || 
-                        currentTick - compRecipient.lastJargonInteractionTick < IndividualCooldownTicks)
-                    {
-                        return true;
-                    }
+                    const int IndividualCooldownTicks = 4000;
                     
+                    if (currentTick - lastGlobalJargonSpreadTick < MinGlobalTicksBetweenSpreads ||
+                        currentTick - compInitiator.lastJargonInteractionTick < IndividualCooldownTicks ||
+                        currentTick - compRecipient.lastJargonInteractionTick < IndividualCooldownTicks)
+                        return true;
+
                     // float useProbability = GetJargonUseProbability(initiator, recipient);
                     // if (Rand.Value > useProbability)
                     //{
@@ -69,44 +64,45 @@ namespace PirateJargonEvolution
                         return true;
                     }
                     
+                    SpreadJargonBetween(initiator, recipient);
+                    compInitiator.lastJargonInteractionTick = currentTick;
+                    compRecipient.lastJargonInteractionTick = currentTick;
+                    lastGlobalJargonSpreadTick = currentTick;
+                    
                     __result = false;
-                    
-                    // 当两个人
-                    
-                    if (!initiator.Dead && !recipient.Dead)
-                    {
-                        compInitiator.lastJargonInteractionTick = currentTick;
-                        compRecipient.lastJargonInteractionTick = currentTick;
-                        lastGlobalJargonDialogueTick = currentTick;
-
-                        Log.Message($"Total Pirate Factions: {Current.Game.GetComponent<PirateFactionManager>().pirateFactions.Count}");
-                        foreach (var kvp in Current.Game.GetComponent<PirateFactionManager>().pirateFactions)
-                        {
-                            var mem = kvp.Value;
-                            Log.Message($"== {mem.FactionName} ==\nLeader: {mem.Leader}\n");
-                            foreach (var entry in mem.JargonEvolutionHistory)
-                            {
-                                Log.Message($"  • {entry.JargonWord} = {entry.Meaning} ({entry.OriginStory})");
-                            }
-                        }
-                        Log.Message($"FactionId: {initiator.TryGetComp<CompPirateIdentity>().pirateFactionId}");
-                        Log.Message($"Position: {initiator.TryGetComp<CompPirateIdentity>().positionInFaction}");
-                        Log.Message("KnownJargon:");
-                        foreach (string jargon in initiator.TryGetComp<CompPirateIdentity>().knownJargon)
-                        {
-                            Log.Message($"{jargon}");
-                        }
-                        // Important here, get the most current event that both the initiator and the recipient
-                        // are witnesses in.
-                        string situation = SharedEventUtil.GetSharedEventDescription(initiator, recipient); 
-                        PirateJargonDialogueManager.StartDialogue(initiator, recipient, situation);
-                    }
-
                     return false;
+                    
                 }
 
                 return true;
                 
+            }
+            
+            static void SpreadJargonBetween(Pawn a, Pawn b)
+            {
+                var compA = a.TryGetComp<CompPirateIdentity>();
+                var compB = b.TryGetComp<CompPirateIdentity>();
+
+                int beforeA = compA.knownJargon.Count;
+                int beforeB = compB.knownJargon.Count;
+
+                foreach (string jargon in compA.knownJargon)
+                    if (!compB.knownJargon.Contains(jargon))
+                        compB.knownJargon.Add(jargon);
+
+                foreach (string jargon in compB.knownJargon)
+                    if (!compA.knownJargon.Contains(jargon))
+                        compA.knownJargon.Add(jargon);
+
+                int afterA = compA.knownJargon.Count;
+                int afterB = compB.knownJargon.Count;
+
+                if (afterA > beforeA || afterB > beforeB)
+                {
+                    MoteBubbleHelper.ThrowStaticText(a, "Traded slang");
+                    MoteBubbleHelper.ThrowStaticText(b, "Traded slang");
+                    Log.Message($"[PirateJargon] {a.Name} and {b.Name} spread pirate jargon.");
+                }
             }
             
             private static bool IsPawnBusy(Pawn p)

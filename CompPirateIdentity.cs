@@ -14,6 +14,7 @@ namespace PirateJargonEvolution
 
     public class CompPirateIdentity : ThingComp
     {
+        // public int lastJargonInteractionTick = -99999;
         public int lastJargonInteractionTick = -99999;
         public string pirateFactionId = "";
         public List<string> knownJargon = new List<string>(); // 只存黑话关键词
