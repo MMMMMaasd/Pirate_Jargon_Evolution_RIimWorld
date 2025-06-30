@@ -63,6 +63,7 @@
         <Compile Include="CompMoteRepeater.cs" />
         <Compile Include="CompPirateIdentity.cs" />
         <Compile Include="CompThinking.cs" />
+        <Compile Include="FloatMenuPatch.cs" />
         <Compile Include="ITab_Pawn_Jargon.cs" />
         <Compile Include="JargonEntry.cs" />
         <Compile Include="MoteBubbleHelper.cs" />

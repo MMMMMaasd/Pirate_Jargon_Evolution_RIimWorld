@@ -33,7 +33,7 @@ namespace PirateJargonEvolution
                      The jargon style of your faction: {memory.JargonStyle};
                      The origin story of your faction: {memory.OriginStory};
 
-                     Very Important ***In their conversation, you only speak the jargon that both of you and you crewmate know. *** 
+                     Very Important *** If there is some jargons that you know but your crewmate don't know, at least include some of those jargon in you chat *** 
                      Here are your (as the initiator of this talk) known jargon:
                      {FormatJargonDictionary(initiator, memory)}
                      Here are your crewmate's (as the recipient of this talk) known jargon:
@@ -47,7 +47,7 @@ namespace PirateJargonEvolution
                      Your relationship with him/her: {(opinion > 0 ? "Positive" : "Negative")} ({opinion} opinion)
                      Current Situation: {situation}
                      
-                     Now write a short, 1-2 sentence daily chat message that you say to your crewmate based on the current Situation, using your jargon naturally (you only speak the jargons that both you and this crewmate know).    
+                     Now write a short, 1-2 sentence daily chat message that you say to your crewmate based on the current Situation, using your jargon naturally (try to include some jargon you know your crewmate doesn't).    
                      Make it more detailed and personality-driven, considering your traits and relationship.
                      Return only the generated message, no additional text or instructions. Just what they said inside quotes.";
         }
@@ -62,12 +62,6 @@ namespace PirateJargonEvolution
                      The jargon style of your faction: {memory.JargonStyle};
                      The origin story of your faction: {memory.OriginStory};
 
-                     Very Important ***In their conversation, you only speak the jargon that both of you and you crewmate know. *** 
-                     Here are your known jargon:
-                     {FormatJargonDictionary(initiator, memory)}
-                     Here are your crewmate's known jargon:
-                     {FormatJargonDictionary(recipient, memory)}
-
                      Here is the detailed information about you and your crewmate:
                      You: {initiator.Name.ToStringShort} (Traits: {string.Join(", ", initiator.story.traits.allTraits)}) 
                      Your's position in this faction: {initiator.TryGetComp<CompPirateIdentity>().positionInFaction}
@@ -76,7 +70,16 @@ namespace PirateJargonEvolution
                      Your relationship with him/her: {(opinion > 0 ? "Positive" : "Negative")} ({opinion} opinion)
                      Current Situation: {situation}
                      
-                     Now write a short, 1-2 sentence daily chat message that you reply to your crewmate, using your jargon naturally (you only speak the jargons that both you and this crewmate know).    
+                     Now write a short, 1-2 sentence daily chat message that you reply to your crewmate, using your jargon naturally (you only speak the jargons that you know).
+                     Very Important ***In the conversation, if everything your crewmate said to you is what you know, then just reply confidently like a secret jargon pirate talk.
+                     However, if there is any thing crewmate said that is quite confused, then this crewmate might include some jargons you don't know, then you should reply with first infer your crewmate's meaning and then reply to your crewmate's message***
+                     In this case your reply should be in the format: 
+                     'Are you mean: ...? Yes, I agree with you ... '     
+                     
+                     Here are your known jargon: (these are the jargons you only know)!
+                     {FormatJargonDictionary(initiator, memory)}
+
+
                      Make it more detailed and personality-driven, considering your traits and relationship.
                      Return only the generated message, no additional text or instructions. Just what they said inside quotes.";
         }

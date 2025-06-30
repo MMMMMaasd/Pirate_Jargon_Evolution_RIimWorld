@@ -37,7 +37,14 @@ namespace PirateJargonEvolution
             // string situation = $"A significant event occurred: {taleDef.label} involving {names}.";
             string situation = GenerateTaleDescription(taleDef, involvedPawns);
 
+            var victim = new Pawn();
+            var killer = new Pawn();
             
+            if (taleDef.defName == "KilledColonist")
+            {
+                victim = involvedPawns[1];
+                killer = involvedPawns[0];
+            }
             // var victim = involvedPawns[1];
             // var killer = involvedPawns[0];
             
@@ -53,7 +60,7 @@ namespace PirateJargonEvolution
                 if (pawn.Spawned && pawn.Map != null)
                 {
                     witnesses.AddRange(pawn.Map.mapPawns.AllPawnsSpawned
-                        .Where(p => p != pawn && p.Faction == targetFaction && p.RaceProps.Humanlike && p.Position.InHorDistOf(pawn.Position, 15f)));
+                        .Where(p => p != victim && p.Faction == targetFaction && p.RaceProps.Humanlike && p.Position.InHorDistOf(pawn.Position, 15f)));
                 }
             }
             witnesses = witnesses.Distinct().ToList();

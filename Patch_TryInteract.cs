@@ -35,6 +35,23 @@ namespace PirateJargonEvolution
 
                 if (intDef == InteractionDefOf.Chitchat && ShouldUsePirateJargon(initiator, recipient) && !IsPawnBusy(initiator) && !IsPawnBusy(recipient))
                 {
+                    bool compIfUseLLM = initiator.TryGetComp<CompPirateIdentity>().useLLMNextInteraction;
+                    if (compIfUseLLM)
+                    {
+                        // 目前必然是true
+                        string same_situation = SharedEventUtil.GetSharedEventDescription(initiator, recipient);
+                        if (string.IsNullOrEmpty(same_situation))
+                        {
+                            return true;
+                        }
+
+                        initiator.TryGetComp<CompPirateIdentity>().useLLMNextInteraction = false;
+                        PirateJargonDialogueManager.StartDialogue(initiator, recipient, same_situation);
+                        
+                        __result = false;
+                        return false;
+                    }
+                    
                     int currentTick = Find.TickManager.TicksGame;
                     var compInitiator = initiator.TryGetComp<CompPirateIdentity>();
                     var compRecipient = recipient.TryGetComp<CompPirateIdentity>();
@@ -63,6 +80,7 @@ namespace PirateJargonEvolution
                     {
                         return true;
                     }
+                    
                     
                     SpreadJargonBetween(initiator, recipient);
                     compInitiator.lastJargonInteractionTick = currentTick;
