@@ -144,20 +144,44 @@ namespace PirateJargonEvolution
             switch (taleDef.defName)
             {
                 case "KilledChild":
+                    if (pawns.Count >= 2)
+                        return $"{pawns[0].Name.ToStringShort} killed child {pawns[1].Name.ToStringShort}.";
+                    break;
+                
                 case "KilledColonist":
+                    if (pawns.Count >= 2)
+                        return $"{pawns[0].Name.ToStringShort} killed colonist {pawns[1].Name.ToStringShort}.";
+                    break;
+                
                 case "KilledColonyAnimal":
+                    if (pawns.Count >= 2)
+                        return $"{pawns[0].Name.ToStringShort} killed animal {pawns[1].Name.ToStringShort}.";
+                    break;
+                
                 case "KilledLongRange":
+                    if (pawns.Count >= 2)
+                        return $"{pawns[0].Name.ToStringShort} sniped {pawns[1].Name.ToStringShort} from long range.";
+                    break;
+                
                 case "KilledMelee":
+                    if (pawns.Count >= 2)
+                        return $"{pawns[0].Name.ToStringShort} killed {pawns[1].Name.ToStringShort} with melee.";
+                    break;
+                
                 case "KilledMajorThreat":
+                    if (pawns.Count >= 2)
+                        return $"{pawns[0].Name.ToStringShort} took down a major threat: {pawns[1].Name.ToStringShort}.";
+                    break;
+                
                 case "DefeatedHostileFactionLeader":
                     if (pawns.Count >= 2)
-                        return $"{pawns[0].Name.ToStringShort} killed {pawns[1].Name.ToStringShort}.";
+                        return $"{pawns[0].Name.ToStringShort} defeated a hostile faction leader: {pawns[1].Name.ToStringShort}.";
 
                     break;
 
                 case "ExecutedPrisoner":
                     if (pawns.Count >= 1)
-                        return $"{pawns[0].Name.ToStringShort} was executed.";
+                        return $"Prisoner {pawns[0].Name.ToStringShort} was executed.";
                     break;
 
                 case "Captured":
@@ -167,12 +191,12 @@ namespace PirateJargonEvolution
 
                 case "SoldPrisoner":
                     if (pawns.Count >= 1)
-                        return $"{pawns[0].Name.ToStringShort} was sold.";
+                        return $"Prisoner {pawns[0].Name.ToStringShort} was sold.";
                     break;
 
                 case "KidnappedColonist":
                     if (pawns.Count >= 1)
-                        return $"{pawns[0].Name.ToStringShort} was kidnapped.";
+                        return $"Colonist {pawns[0].Name.ToStringShort} was kidnapped.";
                     break;
 
                 case "ButcheredHumanlikeCorpse":
