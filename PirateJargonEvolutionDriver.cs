@@ -37,14 +37,36 @@ namespace PirateJargonEvolution
             // string situation = $"A significant event occurred: {taleDef.label} involving {names}.";
             string situation = GenerateTaleDescription(taleDef, involvedPawns);
 
-            var victim = new Pawn();
-            var killer = new Pawn();
-            
-            if (taleDef.defName == "KilledColonist")
+            Pawn victim = null;
+            Pawn killer = null;
+
+            switch (taleDef.defName)
             {
-                victim = involvedPawns[1];
-                killer = involvedPawns[0];
+                case "KilledChild":
+                case "KilledColonist":
+                case "KilledColonyAnimal":
+                case "KilledLongRange":
+                case "KilledMelee":
+                case "KilledMajorThreat":
+                case "DefeatedHostileFactionLeader":
+                    if (involvedPawns.Count >= 2)
+                    {
+                        killer = involvedPawns[0];
+                        victim = involvedPawns[1];
+                    }
+                    break;
+
+                case "ExecutedPrisoner":
+                case "SoldPrisoner":
+                case "KidnappedColonist":
+                case "Captured":
+                    if (involvedPawns.Count >= 1)
+                    {
+                        victim = involvedPawns[0];
+                    }
+                    break;
             }
+
             // var victim = involvedPawns[1];
             // var killer = involvedPawns[0];
             
