@@ -60,7 +60,7 @@ namespace PirateJargonEvolution
             {
                 if (initiatorKnownJargon.Contains(jargon) && !recipientKnownJargon.Contains(jargon))
                 {
-                    recipient.TryGetComp<CompPirateIdentity>().knownJargon.Add((jargon));
+                    recipient.TryGetComp<CompPirateIdentity>().knownJargon.Add(jargon);
                     MoteBubbleHelper.ThrowStaticText(recipient, $"Learned: {jargon}");
                     Log.Message($"[PirateJargon] {recipient.Name} learned '{jargon}' from LLM dialog.");
                 }

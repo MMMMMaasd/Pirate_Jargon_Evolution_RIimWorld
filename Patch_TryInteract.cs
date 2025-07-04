@@ -47,6 +47,7 @@ namespace PirateJargonEvolution
                         }
 
                         initiator.TryGetComp<CompPirateIdentity>().useLLMNextInteraction = false;
+                        recipient.TryGetComp<CompPirateIdentity>().useLLMNextInteraction = false;
                         PirateJargonDialogueManager.StartDialogue(initiator, recipient, same_situation);
                         
                         __result = false;
