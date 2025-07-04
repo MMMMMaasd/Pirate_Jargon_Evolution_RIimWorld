@@ -136,7 +136,7 @@ namespace PirateJargonEvolution
                     MoteBubbleHelper.ThrowStaticText(w, "Heard new slang...");
                     foreach (var entry in newEntries)
                     {
-                        w.TryGetComp<CompPirateIdentity>().knownJargon.Add(entry.JargonWord);
+                        w.TryGetComp<CompPirateIdentity>().knownJargon.Add(entry.JargonWord.ToLowerInvariant());
                         Log.Message($"Jargon word {entry.JargonWord} added to {w.Name}");
                     }
                 }

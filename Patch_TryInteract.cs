@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using RimWorld;
 using Verse;
 using HarmonyLib;
@@ -101,16 +102,35 @@ namespace PirateJargonEvolution
                 var compA = a.TryGetComp<CompPirateIdentity>();
                 var compB = b.TryGetComp<CompPirateIdentity>();
 
+                int maxSpread = 3;
+                List<string> spreadAtoB = compA.knownJargon
+                    .Where(j => !compB.knownJargon.Contains(j))
+                    .OrderBy(_ => Rand.Value)
+                    .Take(maxSpread)
+                    .ToList();
+
+                List<string> spreadBtoA = compB.knownJargon
+                    .Where(j => !compA.knownJargon.Contains(j))
+                    .OrderBy(_ => Rand.Value)
+                    .Take(maxSpread)
+                    .ToList();
+                
                 int beforeA = compA.knownJargon.Count;
                 int beforeB = compB.knownJargon.Count;
+                
+                foreach (var jargon in spreadAtoB)
+                    compB.knownJargon.Add(jargon.ToLowerInvariant());
 
-                foreach (string jargon in compA.knownJargon)
-                    if (!compB.knownJargon.Contains(jargon))
-                        compB.knownJargon.Add(jargon);
+                foreach (var jargon in spreadBtoA)
+                    compA.knownJargon.Add(jargon.ToLowerInvariant());
 
-                foreach (string jargon in compB.knownJargon)
-                    if (!compA.knownJargon.Contains(jargon))
-                        compA.knownJargon.Add(jargon);
+              //  foreach (string jargon in compA.knownJargon)
+              //      if (!compB.knownJargon.Contains(jargon))
+              //          compB.knownJargon.Add(jargon);
+
+              //  foreach (string jargon in compB.knownJargon)
+              //      if (!compA.knownJargon.Contains(jargon))
+              //          compA.knownJargon.Add(jargon);
 
                 int afterA = compA.knownJargon.Count;
                 int afterB = compB.knownJargon.Count;

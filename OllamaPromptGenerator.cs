@@ -34,11 +34,10 @@ namespace PirateJargonEvolution
                      The origin story of your faction: {memory.OriginStory};
 
                      Very Important *** If there is some jargons that you know but your crewmate don't know, at least include some of those jargon in you chat *** 
-                     Here are your (as the initiator of this talk) known jargon:
+                     Here are your (as the initiator of this talk) known jargon (you only know these jargons:
                      {FormatJargonDictionary(initiator, memory)}
-                     Here are your crewmate's (as the recipient of this talk) known jargon:
-                     {FormatJargonDictionary(recipient, memory)}
 
+ 
                      Here is the detailed information about you and your crewmate:
                      You: {initiator.Name.ToStringShort} (Traits: {string.Join(", ", initiator.story.traits.allTraits)}) 
                      Your's position in this faction: {initiator.TryGetComp<CompPirateIdentity>().positionInFaction}
@@ -47,9 +46,13 @@ namespace PirateJargonEvolution
                      Your relationship with him/her: {(opinion > 0 ? "Positive" : "Negative")} ({opinion} opinion)
                      Current Situation: {situation}
                      
-                     Now write a short, 1-2 sentence daily chat message that you say to your crewmate based on the current Situation, using your jargon naturally (try to include some jargon you know your crewmate doesn't).    
+                     --- Your Task --- 
+                     Now write a short, 1-2 sentence daily chat message that you say to your crewmate based on the current Situation, using your jargon naturally (try to at least use more than two jargons).    
+                     Very Important *** you can only speak the jargons you know!! *** 
                      Make it more detailed and personality-driven, considering your traits and relationship.
-                     Return only the generated message, no additional text or instructions. Just what they said inside quotes.";
+                     Return only the generated message, no additional text or instructions. Just what they said inside quotes.
+                     After the quoted sentence, list the pirate jargons you used in this format:
+                     UsedJargon: (jargon1, jargon2, ...)";
         }
         
         public static string GenerateJargonEvolutionPromptRecipient(PirateFactionMemory memory, Pawn initiator, Pawn recipient, string situation, string input)

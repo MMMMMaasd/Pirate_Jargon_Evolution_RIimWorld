@@ -75,8 +75,8 @@ namespace PirateJargonEvolution.Utils
                     // Basic sanity check
                     if (word.Length > 1 && meaning.Length > 2)
                     {
-                        entries.Add(new JargonEntry(word, meaning, origin));
-                        Log.Message($"[PirateJargon] Parsed jargon: {word} -> {meaning}");
+                        entries.Add(new JargonEntry(word.ToLowerInvariant(), meaning, origin));
+                        Log.Message($"[PirateJargon] Parsed jargon: {word.ToLowerInvariant()} -> {meaning}");
                     }
                 }
                 catch (Exception e)

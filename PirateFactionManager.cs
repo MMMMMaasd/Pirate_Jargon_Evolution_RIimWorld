@@ -119,12 +119,23 @@ namespace PirateJargonEvolution
             
             Dictionary<string, string> pirateStoryDict = new Dictionary<string, string>();
             
-            pirateStoryDict.Add("Calico Jack Pirate Group", "In 1715, Calico Jack defected from the British Navy and joined forces with Anne Bonny and Mary Read to create the Cotton Jack Pirates. Known for their fast and flexible attacks and wanton and indulgent lifestyle, they were active in the Bahamas and became the wildest symbol of freedom in the Caribbean."); 
-            pirateStoryDict.Add("Blackbeard Pirates", "Edward Teach, the Blackbeard, established his Terror Fleet in the early 1710s, using bushy black beards and fireworks to intimidate the Royal Navy, and using artillery and psychological tactics to dominate the Atlantic coast."); 
-            pirateStoryDict.Add("The Red Flag Fleet", "In 1712, Zheng Yisao, a powerful woman at sea, led a diverse fleet, hoisted a bright red flag, and rebelled against the Qing Dynasty and the colonists. They were famous for their fire attacks and guerrilla warfare, protecting the interests of the Chinese and becoming a powerful force in the Caribbean."); 
-            pirateStoryDict.Add("Prince Pirates", "Founded in 1713 by the impoverished French nobleman \"Prince of Leon\", the Prince's Pirates combined French military discipline and aristocratic style. They were active along the coast of Cuba, known for their nobility and ambition, and often clashed with Spanish colonial forces.");
-            pirateStoryDict.Add("Redbeard Pirates", "In the 1710s, the descendants of the legendary Ottoman pirate brothers Hayreddin Barbarossa, brought their family glory to the Caribbean and became a strong rival to the Spanish Golden Fleet with their cruel and decisive style and excellent navigation skills.");
-            pirateStoryDict.Add("Kidd's Pirates", "William Kidd, who was once accused of being a pirate, reorganized the pirate group in 1714, emphasizing discipline and honor, and advocating the protection of the weak and resistance to colonization. They were good at long-distance navigation and intelligence, and became an important force in the Caribbean.");
+    pirateStoryDict.Add("Calico Jack Pirate Group", 
+"In 5501, the rogue commander known as Calico Jack defected from the Stellar Navy, escaping with two infamous outlaws—Anne Bonny and Mary Read—aboard a stolen patrol frigate. Establishing the Cotton Jack Pirates on a flooded rimworld, they became a symbol of wild freedom and hedonism, thriving among oceanic archipelagos and derelict sea platforms.");
+
+pirateStoryDict.Add("Blackbeard Pirates", 
+"In the early 5500s, Edward 'Blackbeard' Teach, a warlord from a scorched industrial world, gathered a terror fleet of fire-worshipping fanatics and ex-convicts. Masked in smoke and wielding salvaged artillery, they terrorized trade routes and orbital drop zones with psychological warfare and heavy raids.");
+
+pirateStoryDict.Add("The Red Flag Fleet", 
+"Led by the battle-hardened admiral Zheng Yisao, the Red Flag Fleet rose from a collapsed Eastern Federation colony ship. Formed of refugees and mercenaries, they hoisted crimson banners and launched fire-raids against Empire outposts, protecting scattered settlements of ocean-born Rimlanders.");
+
+pirateStoryDict.Add("Prince Pirates", 
+"Once a noble scion of a fallen glitterworld house, the self-styled 'Prince of Leon' formed his pirate court from exiled officers and synth-silk duelists. With flair and discipline, his crew carves through the southern reefs of the Rim, seeking lost tech, prestige, and revenge on the imperial aristocracy.");
+
+pirateStoryDict.Add("Redbeard Pirates", 
+"Descendants of the ancient Redbeard dynasty, these pirates emerged from the wreck of a crashed Ottoman Arkship. Known for their brutal tactics and unmatched navigation through planet-wide storm systems, they raid with fire and blade in honor of their ancestors' solar-spanning legacy.");
+
+pirateStoryDict.Add("Kidd's Pirates", 
+"Once branded a pirate by the Empire, Captain Kidd returned from cryo-exile to lead a disciplined brotherhood of fringe-world idealists. They protect scattered outposts from raiders and slavers, sailing modular sea-fortresses armed with long-range coilguns and a code of honor forged in rebellion.");
 
             int nameIndex = 0;
             int randomNameIndex = 1;
@@ -155,7 +166,7 @@ namespace PirateJargonEvolution
                             factionName = "Red Jacket Pirates";
                             leaderName = faction.leader.Name.ToStringFull;
                             originStory =
-                                "The Red Jacket Pirates were founded in 1716 by a group of retired navy soldiers and defected privateers. They wore bright red military uniforms, symbolizing revolution and bloody freedom. Unlike traditional pirates, they have strict discipline, but also embrace the chaos and violence at sea. They walk on the edge of the law and guerrilla warfare among the Caribbean islands, becoming synonymous with freedom and resistance.";
+                                "Formed in 5502 by deserters from a shattered Imperial naval battalion and rogue privateers, the Red Jacket Pirates are known for their crimson combat coats—relics of a forgotten war. Straddling the line between order and anarchy, they fight with military precision but revel in the chaos of the rim. Operating from drifting sea-fortresses and storm-swept archipelagos, they wage guerrilla warfare against planetary authorities, carving their own bloody vision of freedom into the tides of this lawless";
                             jargonStyle =
                                 "The Red Jacket Pirates' jargon is a blend of military terminology and street slang. The language is concise and powerful, full of metaphors and innuendos.";
                         }
@@ -187,7 +198,7 @@ namespace PirateJargonEvolution
                     if (faction == Faction.OfPlayer)
                     {
                         // mem.CurrentJargon = "Light a match";
-                        mem.JargonEvolutionHistory.Add(new JargonEntry("Light a match", "Kill this hostage", "During a hijacking of a royal merchant ship, the Red Jacket pirates locked the hostages in the bottom of the cabin. When the captain ordered the execution of the hostages, he said, 'Light a match'. His men immediately understood what he meant and set fire to all the hostages."));
+                        mem.JargonEvolutionHistory.Add(new JargonEntry("light a match", "Kill this hostage", "During a hijacking of a royal merchant ship, the Red Jacket pirates locked the hostages in the bottom of the cabin. When the captain ordered the execution of the hostages, he said, 'Light a match'. His men immediately understood what he meant and set fire to all the hostages."));
                     }
                     else
                     {
