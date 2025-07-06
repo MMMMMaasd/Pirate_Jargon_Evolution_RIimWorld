@@ -23,37 +23,45 @@ namespace PirateJargonEvolution
                      Return only the generated message, no additional text or instructions. Just what they said inside quotes.";
         }
         
-        public static string GenerateJargonEvolutionPromptInitiator(PirateFactionMemory memory, Pawn initiator, Pawn recipient, string situation)
+        public static string GenerateJargonEvolutionPromptInitiator(PirateFactionMemory memory, Pawn initiator, Pawn recipient, string situation, List<string> jargonToUSe)
         {
             float opinion = initiator.relations.OpinionOf(recipient);
-            return $@"You are in the Rim World game world with a medieval pirates mod, you are playing a pirate in it, 
-                     You are a pirate named {initiator.Name.ToStringShort} talking to your crewmate {recipient.Name.ToStringShort}
-                     Both of you and your crewmate each belonging to the faction '{memory.FactionName ?? "Unknown Pirate Crew"}'.
-                     For your reference:
-                     The jargon style of your faction: {memory.JargonStyle};
-                     The origin story of your faction: {memory.OriginStory};
+            return $@"
+                        You are playing a pirate character in a RimWorld modded game with a medieval pirate setting.
 
-                     Very Important *** If there is some jargons that you know but your crewmate don't know, at least include some of those jargon in you chat *** 
-                     Here are your (as the initiator of this talk) known jargon (you only know these jargons:
-                     {FormatJargonDictionary(initiator, memory)}
+                        You are '{initiator.Name.ToStringShort}', speaking to your crewmate '{recipient.Name.ToStringShort}'.
+                        Both of you belong to the same pirate faction: '{memory.FactionName ?? "Unknown Pirate Crew"}'.
 
- 
-                     Here is the detailed information about you and your crewmate:
-                     You: {initiator.Name.ToStringShort} (Traits: {string.Join(", ", initiator.story.traits.allTraits)}) 
-                     Your's position in this faction: {initiator.TryGetComp<CompPirateIdentity>().positionInFaction}
-                     Recipient: {recipient.Name.ToStringShort} (Traits: {string.Join(", ", recipient.story.traits.allTraits)})
-                     Recipient's position in this faction: {recipient.TryGetComp<CompPirateIdentity>().positionInFaction}
-                     Your relationship with him/her: {(opinion > 0 ? "Positive" : "Negative")} ({opinion} opinion)
-                     Current Situation: {situation}
-                     
-                     --- Your Task --- 
-                     Now write a short, 1-2 sentence daily chat message that you say to your crewmate based on the current Situation, using your jargon naturally (try to at least use more than two jargons).    
-                     Very Important *** you can only speak the jargons you know!! *** 
-                     Make it more detailed and personality-driven, considering your traits and relationship.
-                     Return only the generated message, no additional text or instructions. Just what they said inside quotes.
-                     After the quoted sentence, list the pirate jargons you used in this format:
-                     UsedJargon: (jargon1, jargon2, ...)";
+                        Faction style: {memory.JargonStyle}
+                        Faction origin story: {memory.OriginStory}
+
+                        Here are the pirate jargons YOU know:
+                        {FormatJargonDictionary(initiator, memory)}
+
+                        Here are the jargon you can speak in this conversation (you can ONLY use these in your message):
+                        {string.Join("\n", jargonToUSe)}
+
+                        Some additional information:
+                            - Your traits: {string.Join(", ", initiator.story.traits.allTraits)}
+                            - Your position: {initiator.TryGetComp<CompPirateIdentity>().positionInFaction}
+                            - Crewmate traits: {string.Join(", ", recipient.story.traits.allTraits)}
+                            - Crewmate position: {recipient.TryGetComp<CompPirateIdentity>().positionInFaction}
+                            - Relationship: {(opinion > 0 ? "Positive" : "Negative")} ({opinion} opinion)
+                            - Current situation/context: {situation}
+
+                        ---
+
+                        Now, your task is:
+
+                        1. Write a short (1–2 sentence) message that YOU say to your crewmate, relate to the situation/context.
+                        2. Naturally include AT LEAST TWO pirate jargons in your conversation.
+                        3. You may only use the jargons you can speak here — do not invent new ones or use unknown ones or those that you know but not allow to say in this conversation.
+                        4. The response MUST follow this strict format exactly (Return only the generated message, no additional text or instructions. Just what they said inside quotes):
+
+                        “Your message here, using pirate slang naturally.”.
+                        ";
         }
+
         
         public static string GenerateJargonEvolutionPromptRecipient(PirateFactionMemory memory, Pawn initiator, Pawn recipient, string situation, string input)
         {
@@ -134,6 +142,7 @@ namespace PirateJargonEvolution
             }
             return string.Join("\n", lines);
         }
+        
 
         private static string FormatJargonDictionary(PirateFactionMemory memory)
         {

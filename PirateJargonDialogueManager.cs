@@ -3,6 +3,7 @@ using Verse;
 using System.Threading.Tasks;
 using PirateJargonEvolution.Utils;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 
@@ -26,10 +27,22 @@ namespace PirateJargonEvolution
             moteA?.StartRepeating();
             // MoteBubbleHelper.ThrowStaticText(initiator, "...");
 
+            // Leanred the jargon
+
+            var compAPirate = initiator.TryGetComp<CompPirateIdentity>();
+            var compBPirate = recipient.TryGetComp<CompPirateIdentity>();
+            
+            int maxSpread = 3; // control variable
+            
+            List<string> wordToUse = compAPirate.knownJargon
+                .OrderBy(_ => Rand.Value)
+                .Take(maxSpread)
+                .ToList();
+            
             PirateFactionMemory commonFaction =
                 SharedEventUtil.GetFaction(initiator.TryGetComp<CompPirateIdentity>().pirateFactionId);
             
-            string prompt1 = OllamaPromptGenerator.GenerateJargonEvolutionPromptInitiator(commonFaction, initiator, recipient, situation);
+            string prompt1 = OllamaPromptGenerator.GenerateJargonEvolutionPromptInitiator(commonFaction, initiator, recipient, situation, wordToUse);
             Log.Message(prompt1);
             string response1 = await OllamaHelper.CallOllamaAsync(prompt1);
             var usedWords = ParseUsedJargon(response1);
@@ -37,32 +50,32 @@ namespace PirateJargonEvolution
             {
                 Log.Message($"word to spread: {word}");
             }
-            string response1Strip = ExtractQuotedLine(response1);
             
             moteA?.StopRepeating();
-            MoteBubbleHelper.ThrowStaticText(initiator, response1Strip);
+            MoteBubbleHelper.ThrowStaticText(initiator, response1);
             
             await Task.Delay(3000);
             
             moteB?.StartRepeating();
             // MoteBubbleHelper.ThrowStaticText(recipient, "...");
-            string prompt2 = OllamaPromptGenerator.GenerateJargonEvolutionPromptRecipient(commonFaction, recipient, initiator, situation, response1Strip);
+            string prompt2 = OllamaPromptGenerator.GenerateJargonEvolutionPromptRecipient(commonFaction, recipient, initiator, situation, response1);
             string response2 = await OllamaHelper.CallOllamaAsync(prompt2);
             Log.Message(prompt2);
             moteB?.StopRepeating();
             MoteBubbleHelper.ThrowStaticText(recipient, response2);
-
-            // Leanred the jargon
+            
+                        
             List<string> initiatorKnownJargon = initiator.TryGetComp<CompPirateIdentity>().knownJargon;
             List<string> recipientKnownJargon = recipient.TryGetComp<CompPirateIdentity>().knownJargon;
-
-            foreach (var jargon in usedWords)
+            
+            foreach (var jargon in wordToUse)
             {
-                if (initiatorKnownJargon.Contains(jargon) && !recipientKnownJargon.Contains(jargon))
+                if (!recipientKnownJargon.Contains(jargon))
                 {
                     recipient.TryGetComp<CompPirateIdentity>().knownJargon.Add(jargon);
                     MoteBubbleHelper.ThrowStaticText(recipient, $"Learned: {jargon}");
-                    Log.Message($"[PirateJargon] {recipient.Name} learned '{jargon}' from LLM dialog.");
+                    Log.Message($"[PirateJargon] {recipient.Name} learned '{jargon}' fron LLM dialog.");
+
                 }
             }
             
